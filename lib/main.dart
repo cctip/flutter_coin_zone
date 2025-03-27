@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'pages/home.dart';
+import 'pages/index.dart';
 import 'pages/profile.dart';
 import 'pages/setting.dart';
 import 'common/Global.dart';
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(89, 0, 206, 1)),
       ),
       routes: {
-        "/": (context) => MyHomePage(),
+        "/": (context) => IndexPage(),
         'profile': (context) => ProfileView(),
         'setting': (context) => SettingView(),
       },

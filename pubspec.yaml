@@ -1,4 +1,4 @@
-name: coin_zone
+name: flutter_coin_zone
 description: "A new Flutter project."
 flutter_icons:
   image_path: "assets/images/logo.png"
@@ -36,6 +36,7 @@ flutter:
 
   assets:
     - assets/icons/
+    - assets/images/tabbar/
     - assets/images/splash.png
 
   fonts:

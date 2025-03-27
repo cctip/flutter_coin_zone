@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../common/Global.dart';
 
-
-String avator = Global.avator; // 头像
-
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
 
@@ -13,6 +10,7 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStateMixin {
   List globalKeys = [];
+  String avator = Global.avator; // 头像
 
 	@override
 	Widget build(BuildContext context) {
