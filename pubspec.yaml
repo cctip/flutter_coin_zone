@@ -1,0 +1,54 @@
+name: coin_zone
+description: "A new Flutter project."
+flutter_icons:
+  image_path: "assets/images/logo.png"
+  android: true 
+  ios: true 
+flutter_native_splash:
+  color: "#FFFFFF"
+  image: assets/images/splash.png
+  
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.7.2
+  
+dependencies:
+  flutter:
+    sdk: flutter
+    
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.1.1
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.14.3
+  url_launcher: ^6.3.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/images/splash.png
+
+  fonts:
+    - family: Lexend
+      fonts: 
+        - asset: assets/fonts/Lexend/Lexend-VariableFont_wght.ttf
+        - asset: assets/fonts/Lexend/static/Lexend-Black.ttf
+        - asset: assets/fonts/Lexend/static/Lexend-Bold.ttf
+        - asset: assets/fonts/Lexend/static/Lexend-ExtraBold.ttf
+        - asset: assets/fonts/Lexend/static/Lexend-ExtraLight.ttf
+        - asset: assets/fonts/Lexend/static/Lexend-Light.ttf
+        - asset: assets/fonts/Lexend/static/Lexend-Medium.ttf
+        - asset: assets/fonts/Lexend/static/Lexend-Regular.ttf
+        - asset: assets/fonts/Lexend/static/Lexend-SemiBold.ttf
+        - asset: assets/fonts/Lexend/static/Lexend-Thin.ttf
+          style: italic
