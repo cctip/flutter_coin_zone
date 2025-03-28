@@ -9,47 +9,68 @@ class SettingView extends StatelessWidget {
 	@override
 	Widget build(BuildContext context) {
 		return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
 			body: Column(
         children: [
           AppBar(
-            backgroundColor: Colors.black,
-            iconTheme: IconThemeData(color: Colors.white),
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.black),
             centerTitle: false,
             title: Text('Settings', style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold
+              color: Colors.black,
+              fontSize: 17,
             ))
           ),
           Column(
             children: [
-              linkItem('Policy privacy', (){
-                launchUrl(Uri.parse('https://www.freeprivacypolicy.com/live/f8f77e38-89e6-4d25-85bb-25809cac41c9'));
-              }),
-              linkItem('Terms of service', (){
-                launchUrl(Uri.parse('https://www.freeprivacypolicy.com/live/2d59955b-496a-4833-8b7d-52266a5b8936'));
-              }),
+              linkItem(
+                'Share to friends',
+                Image.asset('assets/icons/arrow.png', width: 24),
+                (){}
+              ),
+              linkItem(
+                'Contact us',
+                Image.asset('assets/icons/arrow.png', width: 24),
+                (){}
+              ),
+              linkItem(
+                'Privacy policy',
+                Image.asset('assets/icons/arrow.png', width: 24),
+                (){
+                  launchUrl(Uri.parse(''));
+                }
+              ),
+              linkItem(
+                'Terms of service',
+                Image.asset('assets/icons/arrow.png', width: 24),
+                (){
+                  launchUrl(Uri.parse(''));
+                }
+              ),
+              linkItem(
+                'About',
+                Text('v1.0.0', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.w400)),
+                (){
+                  launchUrl(Uri.parse(''));
+                }
+              ),
               // linkItem('Clear Cache', (){ Global.clear(); }),
             ],
           ),
-          Spacer(),
-          Text('v 1.0.1', style: TextStyle(color: Color.fromRGBO(249, 249, 249, 0.2), fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(height: kBottomNavigationBarHeight)
         ],
       ),
 		);
 	}
 }
 
-Widget linkItem(text, func) {
-  return Container(
+Widget linkItem(text, Widget rightWidget, func) {
+  return SizedBox(
     height: 58,
-    decoration: BoxDecoration(color: Colors.black),
     child: ElevatedButton(
       style: ElevatedButton.styleFrom(
+        padding: EdgeInsets.symmetric(horizontal: 16),
         alignment: Alignment.centerLeft,
-        overlayColor: Colors.white,
+        overlayColor: Color(0xFF1B191C),
         shadowColor: Colors.transparent,
         elevation: 0, // 阴影
         backgroundColor: Colors.transparent,
@@ -62,11 +83,11 @@ Widget linkItem(text, func) {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(text, style: TextStyle(
-            color: Colors.white,
-            fontSize: 14,
-            fontWeight: FontWeight.bold
+            color: Color(0xFF1B191C),
+            fontSize: 16,
+            fontWeight: FontWeight.w400
           )),
-          Icon(Icons.arrow_forward_ios, color: Colors.white)
+          rightWidget
         ],
       ),
     ),

@@ -39,6 +39,7 @@ flutter:
     - assets/images/tabbar/
     - assets/images/avator/
     - assets/images/home/
+    - assets/images/profile/
     - assets/images/splash.png
 
   fonts:

@@ -17,7 +17,7 @@ class HomePageState extends State<HomePage> {
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, kToolbarHeight, 0, 0),
         decoration: BoxDecoration(
-          color: Color(0xff0F0F12),
+          color: Color(0xffFFFFFF),
           image: DecorationImage(image: AssetImage('assets/images/home/home_bg.png'), fit: BoxFit.fill)
         ),
         child: Column(
@@ -50,7 +50,6 @@ class HomePageState extends State<HomePage> {
             Expanded(
               child: Container(
                 padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
-                // clipBehavior: Clip.none,
                 child: CustomScrollView(
                   slivers: [
                     SliverToBoxAdapter(
