@@ -54,7 +54,21 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(16),
                                           color: Color.fromRGBO(255, 255, 255, 0.3)
-                                        )
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text('Points', style: TextStyle(color: Color.fromRGBO(27, 25, 28, 0.5), fontSize: 12)),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Image.asset('assets/icons/star.png', width: 16),
+                                                SizedBox(width: 4),
+                                                Text('999', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       )
                                     ),
                                     SizedBox(width: 10),
@@ -64,7 +78,14 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(16),
                                           color: Color.fromRGBO(255, 255, 255, 0.3)
-                                        )
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text('Predictions', style: TextStyle(color: Color.fromRGBO(27, 25, 28, 0.5), fontSize: 12)),
+                                            Text('8', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                                          ],
+                                        ),
                                       )
                                     ),
                                     SizedBox(width: 10),
@@ -74,7 +95,14 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(16),
                                           color: Color.fromRGBO(255, 255, 255, 0.3)
-                                        )
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text('Successful', style: TextStyle(color: Color.fromRGBO(27, 25, 28, 0.5), fontSize: 12)),
+                                            Text('4', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                                          ],
+                                        ),
                                       )
                                     ),
                                   ],
@@ -82,9 +110,66 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                                 SizedBox(height: 16),
                                 Container(
                                   height: 142,
+                                  padding: EdgeInsets.all(16),
                                   decoration: BoxDecoration(
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(24)
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Text('Checked in for', style: TextStyle(color: Color(0xFF2D2A2F), fontSize: 12)),
+                                          SizedBox(width: 4),
+                                          Text('2 Days', style: TextStyle(color: Color(0xFF5900CE), fontSize: 16, fontWeight: FontWeight.w500)),
+                                          SizedBox(width: 4),
+                                          Text('in a row', style: TextStyle(color: Color(0xFF2D2A2F), fontSize: 12)),
+                                          Spacer(),
+                                          SizedBox(
+                                            width: 90,
+                                            height: 28,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                                                foregroundColor: Colors.white,
+                                                backgroundColor: Color(0xFF0C0C0D),
+                                                disabledForegroundColor: Color.fromRGBO(27, 25, 28, 0.3),
+                                                disabledBackgroundColor: Color(0xFFEDEFF1),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                              ),
+                                              onPressed: () {},
+                                              child: Text('Check in', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      LayoutBuilder(
+                                        builder: (BuildContext context, BoxConstraints constraints) {
+                                          return SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.start,
+                                              children: [
+                                                DailyItem(1),
+                                                DailySpace(),
+                                                DailyItem(2),
+                                                DailySpace(),
+                                                DailyItem(3),
+                                                DailySpace(),
+                                                DailyItem(4),
+                                                DailySpace(),
+                                                DailyItem(5),
+                                                DailySpace(),
+                                                DailyItem(6),
+                                                DailySpace(),
+                                                DailyItem(7),
+                                              ],
+                                            ),
+                                          );
+                                        }
+                                      )
+                                    ],
                                   ),
                                 ),
                               ],
@@ -148,6 +233,45 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
       )
 		);
 	}
+
+  Widget DailyItem(day) {
+    return SizedBox(
+      height: 70,
+      child: Column(
+        children: [
+          Container(
+            width: 44,
+            height: 48,
+            padding: EdgeInsets.only(top: 4, bottom: 2),
+            decoration: BoxDecoration(
+              color: Color(0xFFF2F3F4),
+              borderRadius: BorderRadius.circular(8)
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset('assets/icons/star_blur.png', width: 16),
+                Text('+10', style: TextStyle(color: Color.fromRGBO(45, 42, 47, 0.3)))
+              ],
+            ),
+          ),
+          SizedBox(height: 4),
+          Text('Day $day', style: TextStyle(color: Color.fromRGBO(45, 42, 47, 0.3), fontSize: 12))
+        ],
+      ),
+    );
+  }
+  Widget DailySpace() {
+    return Container(
+      width: 12,
+      height: 2,
+      margin: EdgeInsets.fromLTRB(4, 0, 4, 16),
+      decoration: BoxDecoration(
+        color: Color(0xFF5900CE),
+        borderRadius: BorderRadius.circular(2)
+      ),
+    );
+  }
 
   Widget ChallengeItem() {
     return Container(

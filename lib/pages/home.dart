@@ -35,15 +35,25 @@ class HomePageState extends State<HomePage> {
                       color: Color.fromRGBO(242, 243, 244, 1),
                       borderRadius: BorderRadius.circular(24)
                     ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/icons/star.png', width: 16),
+                        SizedBox(width: 4),
+                        Text('999', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16))
+                      ],
+                    ),
                   ),
                   InkWell(
                     child: Container(
                       width: 56,
                       height: 36,
+                      padding: EdgeInsets.all(6),
                       decoration: BoxDecoration(
                         color: Color.fromRGBO(89, 0, 206, 1),
                         borderRadius: BorderRadius.circular(24)
                       ),
+                      child: Image.asset('assets/icons/lottery.png', width: 24),
                     ),
                     onTap: () {
                       Navigator.pushNamed(context, 'lottery');
@@ -60,7 +70,7 @@ class HomePageState extends State<HomePage> {
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
-                          Results(),
+                          Results(context),
                           Prediction(),
                           SizedBox(height: MediaQuery.of(context).padding.bottom + 80)
                         ],
