@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        fontFamily: 'Lexend',
+        fontFamily: 'Outfit',
         colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(89, 0, 206, 1)),
       ),
       routes: {

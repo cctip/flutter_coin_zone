@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './home.dart';
+import './profile.dart';
 
 
 class IndexPage extends StatefulWidget {
@@ -21,38 +22,96 @@ class IndexPageState extends State<IndexPage> {
     });
   }
   /// 获取项目 icon
-  Widget getItemIcon(String icon) {
-    return Image.asset('assets/images/tabbar/$icon.png', width: 24, height: 24);
+  Widget getItemIcon(String icon, bool active) {
+    String suffix = '';
+    if (active) suffix = '_active';
+    return Image.asset('assets/images/tabbar/$icon$suffix.png', width: 24, height: 24);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: currentIndex,
+      body: Stack(
+        alignment: Alignment.bottomCenter,
         children: [
-          HomePage(),
+          IndexedStack(
+            index: currentIndex,
+            children: [
+              Container(),
+              HomePage(),
+              ProfileView(),
+            ],
+          ),
+          SafeArea(child: BottomBar())
         ],
       ),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.fromLTRB(40, 0, 40, MediaQuery.of(context).padding.bottom),
-        child: Container(
-          height: 64,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(32),
-            color: Colors.black,
-          ),
-          child: Row(
-            children: [
-              Row(
-                children: [
-                  // getItemIcon('create')
-                ],
-              )
-            ],
-          )
+    );
+  }
+
+  Widget BottomBar() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 40),
+      child: Container(
+        height: 64,
+        padding: EdgeInsets.symmetric(horizontal: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(32),
+          color: Colors.black,
         ),
-      )
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            InkWell(
+              child: SizedBox(
+                width: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    getItemIcon('create', currentIndex == 0),
+                    SizedBox(width: currentIndex == 0 ? 4 : 0),
+                    currentIndex == 0 ? Text('Create', style: TextStyle(color: Colors.white)) : Container()
+                  ],
+                ),
+              ),
+              onTapUp: (_) {
+                // onTabChanged(0);
+              },
+            ),
+            InkWell(
+              child: SizedBox(
+                width: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    getItemIcon('home', currentIndex == 1),
+                    SizedBox(width: currentIndex == 1 ? 4 : 0),
+                    currentIndex == 1 ? Text('Home', style: TextStyle(color: Colors.white)) : Container()
+                  ],
+                ),
+              ),
+              onTapUp: (_) {
+                onTabChanged(1);
+              },
+            ),
+            InkWell(
+              child: SizedBox(
+                width: 100,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    getItemIcon('profile', currentIndex == 2),
+                    SizedBox(width: currentIndex == 2 ? 4 : 0),
+                    currentIndex == 2 ? Text('Profile', style: TextStyle(color: Colors.white)) : Container()
+                  ],
+                ),
+              ),
+              onTapUp: (_) {
+                onTabChanged(2);
+              },
+            ),
+          ],
+        )
+      ),
     );
   }
 }
