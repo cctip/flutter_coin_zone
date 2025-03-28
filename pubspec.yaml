@@ -40,6 +40,7 @@ flutter:
     - assets/images/avator/
     - assets/images/home/
     - assets/images/profile/
+    - assets/images/lottery/
     - assets/images/splash.png
 
   fonts:

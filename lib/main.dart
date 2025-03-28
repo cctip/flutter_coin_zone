@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'pages/lottery.dart';
 import 'pages/index.dart';
+import 'pages/create.dart';
 import 'pages/profile.dart';
 import 'pages/setting.dart';
 import 'common/Global.dart';
@@ -18,6 +20,8 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         "/": (context) => IndexPage(),
+        "create": (context) => CreateView(),
+        "lottery": (context) => LotteryView(),
         'profile': (context) => ProfileView(),
         'setting': (context) => SettingView(),
       },

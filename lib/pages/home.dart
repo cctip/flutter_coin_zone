@@ -36,14 +36,19 @@ class HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(24)
                     ),
                   ),
-                  Container(
-                    width: 56,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(89, 0, 206, 1),
-                      borderRadius: BorderRadius.circular(24)
+                  InkWell(
+                    child: Container(
+                      width: 56,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(89, 0, 206, 1),
+                        borderRadius: BorderRadius.circular(24)
+                      ),
                     ),
-                  ),
+                    onTap: () {
+                      Navigator.pushNamed(context, 'lottery');
+                    },
+                  )
                 ],
               ),
             ),

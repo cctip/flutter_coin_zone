@@ -74,7 +74,7 @@ class IndexPageState extends State<IndexPage> {
                 ),
               ),
               onTapUp: (_) {
-                // onTabChanged(0);
+                Navigator.pushNamed(context, 'create');
               },
             ),
             InkWell(
