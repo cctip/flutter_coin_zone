@@ -42,13 +42,13 @@ class IndexPageState extends State<IndexPage> {
               ProfileView(),
             ],
           ),
-          SafeArea(child: BottomBar())
+          SafeArea(child: __bottomBar())
         ],
       ),
     );
   }
 
-  Widget BottomBar() {
+  Widget __bottomBar() {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 40),
       child: Container(

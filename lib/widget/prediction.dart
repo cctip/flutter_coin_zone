@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget Prediction() {
+Widget predictionBox() {
   return Builder(
     builder: (context) {
       return Column(
@@ -36,9 +36,9 @@ Widget Prediction() {
           ),
           Column(
             children: [
-              PredictionItem(),
-              PredictionItem(),
-              PredictionItem(),
+              __predictionItem(),
+              __predictionItem(),
+              __predictionItem(),
             ],
           )
         ],
@@ -47,7 +47,7 @@ Widget Prediction() {
   );
 }
 
-Widget PredictionItem() {
+Widget __predictionItem() {
   return Container(
     height: 244,
     margin: EdgeInsets.only(top: 16),

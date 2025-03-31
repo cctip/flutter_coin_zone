@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_coin_zone/common/global.dart';
 
-String avator = 'assets/images/avator/3.png';
+String avator = Global.avator;
 
-Widget Infomation(BuildContext context) {
+Widget informationBox(BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,

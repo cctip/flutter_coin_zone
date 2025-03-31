@@ -4,7 +4,7 @@ import 'pages/index.dart';
 import 'pages/create.dart';
 import 'pages/profile.dart';
 import 'pages/setting.dart';
-import 'common/Global.dart';
+import 'common/global.dart';
 
 void main() => Global.init().then((e) => runApp(MyApp()));
 

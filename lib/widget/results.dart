@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget Results(context) {
+Widget resultsBox(context) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -9,15 +9,15 @@ Widget Results(context) {
       Row(
         children: [
           Expanded(
-            child: ResultItem(context, 'BTC', 'BTC', '88,219.00', true, '1.00', 'Claim', (){})
+            child: __resultItem(context, 'BTC', 'BTC', '88,219.00', true, '1.00', 'Claim', (){})
           ),
           SizedBox(width: 10),
           Expanded(
-            child: ResultItem(context, 'ETH', 'ETH', '2,219.00', false, '2.12', 'Faild', null)
+            child: __resultItem(context, 'ETH', 'ETH', '2,219.00', false, '2.12', 'Faild', null)
           ),
           SizedBox(width: 10),
           Expanded(
-            child: ResultItem(context, 'SOL', 'SOL', '119.43', true, '0.12', 'Claimed', null)
+            child: __resultItem(context, 'SOL', 'SOL', '119.43', true, '0.12', 'Claimed', null)
           ),
         ],
       ),
@@ -26,7 +26,7 @@ Widget Results(context) {
   );
 }
 
-Widget ResultItem(context, icon, title, money, rise, rate, btn, func) {
+Widget __resultItem(context, icon, title, money, rise, rate, btn, func) {
   return Container(
     height: 134,
     padding: EdgeInsets.all(16),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_coin_zone/common/global.dart';
 import 'package:flutter_coin_zone/widget/information.dart';
 import 'package:flutter_coin_zone/widget/prediction.dart';
 import 'package:flutter_coin_zone/widget/results.dart';
+
+int starCount = Global.starCount;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,7 +30,7 @@ class HomePageState extends State<HomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Infomation(context),
+                  informationBox(context),
                   Container(
                     width: 80,
                     height: 36,
@@ -40,7 +43,7 @@ class HomePageState extends State<HomePage> {
                       children: [
                         Image.asset('assets/icons/star.png', width: 16),
                         SizedBox(width: 4),
-                        Text('999', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16))
+                        Text('$starCount', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16))
                       ],
                     ),
                   ),
@@ -70,8 +73,8 @@ class HomePageState extends State<HomePage> {
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
-                          Results(context),
-                          Prediction(),
+                          resultsBox(context),
+                          predictionBox(),
                           SizedBox(height: MediaQuery.of(context).padding.bottom + 80)
                         ],
                       )
