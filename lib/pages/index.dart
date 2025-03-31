@@ -52,7 +52,7 @@ class IndexPageState extends State<IndexPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 40),
       child: Container(
-        width: 309,
+        width: 324,
         height: 64,
         padding: EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
@@ -64,7 +64,7 @@ class IndexPageState extends State<IndexPage> {
           children: [
             InkWell(
               child: SizedBox(
-                width: 95,
+                width: 100,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -80,7 +80,7 @@ class IndexPageState extends State<IndexPage> {
             ),
             InkWell(
               child: SizedBox(
-                width: 95,
+                width: 100,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -96,7 +96,7 @@ class IndexPageState extends State<IndexPage> {
             ),
             InkWell(
               child: SizedBox(
-                width: 95,
+                width: 100,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
