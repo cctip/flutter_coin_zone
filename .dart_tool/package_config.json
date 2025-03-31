@@ -116,6 +116,12 @@
       "languageVersion": "3.7"
     },
     {
+      "name": "get",
+      "rootUri": "file:///Users/grant/.pub-cache/hosted/pub.dev/get-4.7.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "image",
       "rootUri": "file:///Users/grant/.pub-cache/hosted/pub.dev/image-4.5.4",
       "packageUri": "lib/",
@@ -404,7 +410,7 @@
       "languageVersion": "3.7"
     }
   ],
-  "generated": "2025-03-31T03:36:48.976486Z",
+  "generated": "2025-03-31T06:21:34.600208Z",
   "generator": "pub",
   "generatorVersion": "3.7.2",
   "flutterRoot": "file:///Users/grant/Flutter/flutter",

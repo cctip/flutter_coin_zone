@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:flutter_mining/common/Global.dart';
-
 
 class SettingView extends StatelessWidget {
   const SettingView({super.key});

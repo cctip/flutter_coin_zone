@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_coin_zone/common/global.dart';
-
-String avator = Global.avator;
+import 'package:flutter_coin_zone/controller/user.dart';
 
 Widget informationBox(BuildContext context) {
   return Row(
@@ -16,7 +14,7 @@ Widget informationBox(BuildContext context) {
           borderRadius: BorderRadius.circular(50)
         ),
         child: ClipOval(
-          child: Image.asset(avator, fit: BoxFit.cover),
+          child: Image.asset(UserController.avator, fit: BoxFit.cover),
         )
       ),
       SizedBox(width: 12),

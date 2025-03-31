@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_coin_zone/common/global.dart';
+import 'package:get/get.dart';
 import 'package:flutter_coin_zone/widget/information.dart';
-
-int get starCount => Global.starCount;
+import 'package:flutter_coin_zone/controller/user.dart';
+import 'package:flutter_coin_zone/controller/check.dart';
 
 class ProfileView extends StatefulWidget{
   const ProfileView({super.key});
-
   @override
   State<ProfileView> createState() => _ProfileViewState();
 }
@@ -14,9 +13,15 @@ class ProfileView extends StatefulWidget{
 class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStateMixin {
   int curTab = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    CheckController.init();
+  }
+
 	@override
 	Widget build(BuildContext context) {
-		return Scaffold(
+    return Scaffold(
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, kToolbarHeight, 0, 0),
         decoration: BoxDecoration(
@@ -67,7 +72,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
           ],
         )
       )
-		);
+    );
 	}
 
   // 账号信息
@@ -90,7 +95,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                   children: [
                     Image.asset('assets/icons/star.png', width: 16),
                     SizedBox(width: 4),
-                    Text('$starCount', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                    Obx(() => Text(UserController.points.value.toString(), style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500)))
                   ],
                 )
               ],
@@ -166,10 +171,8 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                     disabledBackgroundColor: Color(0xFFEDEFF1),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  onPressed: () {
-                    Global.checkToday();
-                  },
-                  child: Text('Check in', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
+                  onPressed: CheckController.isSignedToday ? null : CheckController.onSignToday,
+                  child: Text(CheckController.isSignedToday ? 'Checked' : 'Check in', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
                 ),
               )
             ],
@@ -214,19 +217,22 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
             height: 48,
             padding: EdgeInsets.only(top: 4, bottom: 2),
             decoration: BoxDecoration(
-              color: Color(0xFFF2F3F4),
+              color: Color(CheckController.weekSignedTimes.contains('$day') ? 0xFF5900CE : 0xFFF2F3F4),
               borderRadius: BorderRadius.circular(8)
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Image.asset('assets/icons/star_blur.png', width: 16),
-                Text('+10', style: TextStyle(color: Color.fromRGBO(45, 42, 47, 0.3)))
+                Text('+10', style: TextStyle(color: CheckController.weekSignedTimes.contains('$day') ? Colors.white : Color.fromRGBO(45, 42, 47, 0.3)))
               ],
             ),
           ),
           SizedBox(height: 4),
-          Text('Day $day', style: TextStyle(color: Color.fromRGBO(45, 42, 47, 0.3), fontSize: 12))
+          Text('Day $day', style: TextStyle(
+            color: CheckController.weekSignedTimes.contains('$day') ? Color(0xFF5900CE) : Color.fromRGBO(45, 42, 47, 0.3),
+            fontSize: 12
+          ))
         ],
       ),
     );
