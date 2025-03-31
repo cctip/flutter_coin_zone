@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 application
-INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:2:5-33:19
+INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:5:5-36:19
 INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/debug/AndroidManifest.xml
 MERGED from [:url_launcher_android] /Users/grant/grant's project/flutter_coin_zone/build/url_launcher_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:7:5-12:19
 MERGED from [:url_launcher_android] /Users/grant/grant's project/flutter_coin_zone/build/url_launcher_android/intermediates/merged_manifest/debug/processDebugManifest/AndroidManifest.xml:7:5-12:19
@@ -23,8 +23,8 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] /Users/gran
 	android:name
 		INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml
 manifest
-ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:1:1-45:12
-MERGED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:1:1-45:12
+ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:1:1-48:12
+MERGED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:1:1-48:12
 INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/debug/AndroidManifest.xml:1:1-7:12
 INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/debug/AndroidManifest.xml:1:1-7:12
@@ -91,22 +91,24 @@ MERGED from [com.getkeepsafe.relinker:relinker:1.4.5] /Users/grant/.gradle/cache
 		INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/debug/AndroidManifest.xml
 	xmlns:android
 		ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:1:11-69
-queries
-ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:39:5-44:15
-intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
-ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:40:9-43:18
-action#android.intent.action.PROCESS_TEXT
-ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:41:13-72
-	android:name
-		ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:41:21-70
-data
-ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:42:13-50
-	android:mimeType
-		ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:42:19-48
 uses-permission#android.permission.INTERNET
-ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/debug/AndroidManifest.xml:6:5-66
+ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:3:5-66
+MERGED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:3:5-66
+MERGED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:3:5-66
 	android:name
-		ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/debug/AndroidManifest.xml:6:22-64
+		ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:3:22-64
+queries
+ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:42:5-47:15
+intent#action:name:android.intent.action.PROCESS_TEXT+data:mimeType:text/plain
+ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:43:9-46:18
+action#android.intent.action.PROCESS_TEXT
+ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:44:13-72
+	android:name
+		ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:44:21-70
+data
+ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:45:13-50
+	android:mimeType
+		ADDED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/main/AndroidManifest.xml:45:19-48
 uses-sdk
 INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/debug/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/grant/grant's project/flutter_coin_zone/android/app/src/debug/AndroidManifest.xml

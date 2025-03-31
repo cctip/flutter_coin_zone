@@ -4,7 +4,7 @@ import 'package:flutter_coin_zone/widget/information.dart';
 import 'package:flutter_coin_zone/controller/user.dart';
 import 'package:flutter_coin_zone/controller/check.dart';
 
-class ProfileView extends StatefulWidget{
+class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
   @override
   State<ProfileView> createState() => _ProfileViewState();
@@ -21,7 +21,8 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
 
 	@override
 	Widget build(BuildContext context) {
-    return Scaffold(
+    return 
+    Scaffold(
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, kToolbarHeight, 0, 0),
         decoration: BoxDecoration(
@@ -57,7 +58,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                             children: [
                               __accountBox(),
                               SizedBox(height: 16),
-                              __dailyBox(),
+                              Obx(() => __dailyBox())
                             ]
                           )
                         ),
@@ -171,8 +172,8 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                     disabledBackgroundColor: Color(0xFFEDEFF1),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  onPressed: CheckController.isSignedToday ? null : CheckController.onSignToday,
-                  child: Text(CheckController.isSignedToday ? 'Checked' : 'Check in', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
+                  onPressed: CheckController.isSignedToday.value ? null : CheckController.onSignToday,
+                  child: Text(CheckController.isSignedToday.value ? 'Checked' : 'Check in', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500))
                 ),
               )
             ],

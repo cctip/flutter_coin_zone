@@ -74,7 +74,30 @@ Widget __predictionItem() {
             Image.asset('assets/images/home/chart.png', width: 40)
           ],
         ),
-        Container(),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('\$87,123.02', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700)),
+                  Text('24h Change', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color.fromRGBO(45, 42, 47, 0.5))),
+                  Text('+1.00% (+\$3901.23)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Color(0xFF3AD164))),
+                ],
+              ),
+              Container(
+                color: Colors.amber,
+                child: CustomPaint(
+                  size: Size(140, 70),
+                  painter: PathPainter(
+                    path: drawPath(),
+                  ),
+                ),
+              )
+            ],
+          )
+        ),
         Row(
           children: [
             Expanded(
@@ -112,6 +135,33 @@ Widget __predictionItem() {
     ),
   );
 }
+
+class PathPainter extends CustomPainter {
+  Path path;
+  PathPainter({required this.path});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // paint the line
+    final paint = Paint()
+        ..color = Colors.black
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0;
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true; 
+}
+
+Path drawPath() {
+  final path = Path();
+  path.moveTo(0, 70);
+  path.lineTo(140 / 2, 70 * 0.5);
+  path.lineTo(140, 70 * 0.75);
+  return path;
+}
+
 
 _showRoleDialog(context) {
   showDialog(

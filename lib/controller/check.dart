@@ -6,9 +6,8 @@ import 'package:flutter_coin_zone/controller/user.dart';
 var formater = DateFormat('yyyy-MM-dd');
 
 class CheckController extends GetxController {
-  static Object signHistory = {}; // 签到历史
-  static List<String> weekSignedTimes = []; // 本周已签到日期
-  static bool isSignedToday = false; // 今日是否已签到
+  static final weekSignedTimes = [].obs; // 本周已签到日期
+  static final isSignedToday = false.obs; // 今日是否已签到
 
   // 初始化签到信息
   static init() {
@@ -26,9 +25,9 @@ class CheckController extends GetxController {
     String timeSaturday = formater.format(DateTime(curYear, curMonth, curDay - weekday + 6)); // 周六
     String timeSunday = formater.format(DateTime(curYear, curMonth, curDay - weekday + 7)); // 周日
 
-    weekSignedTimes = [];
+    weekSignedTimes.value = [];
     List<String> historyTimes = SharePref.getStringList('sign_times') ?? [];
-    if (historyTimes.contains(formater.format(now))) isSignedToday = true;
+    if (historyTimes.contains(formater.format(now))) isSignedToday.value = true;
     if (historyTimes.contains(timeMonday)) weekSignedTimes.add('1');
     if (historyTimes.contains(timeTuesday)) weekSignedTimes.add('2');
     if (historyTimes.contains(timeWednesday)) weekSignedTimes.add('3');

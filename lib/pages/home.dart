@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_coin_zone/widget/information.dart';
 import 'package:flutter_coin_zone/widget/prediction.dart';
@@ -12,6 +13,22 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    UserController.init();
+    getRequest();
+  }
+
+  getRequest() async {
+    BaseOptions options = BaseOptions();
+    options.headers['X-CMC_PRO_API_KEY'] = '4cc00188-ea57-4fb0-aa41-f5f7f4d376bc';
+    Dio dio = Dio(options);
+    String url = 'https://pro-api.coinmarketcap.com/v1/blockchain/statistics/latest?symbol=BTC,ETH,SOL&convert=USD';
+    Response response = await dio.get(url);
+    print(response);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

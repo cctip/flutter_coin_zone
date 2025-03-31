@@ -1,6 +1,6 @@
 {
-    "name": "coin_zone",
-    "short_name": "coin_zone",
+    "name": "flutter_coin_zone",
+    "short_name": "flutter_coin_zone",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
