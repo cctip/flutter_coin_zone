@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_coin_zone/controller/user.dart';
+import 'package:get/get.dart';
 
 Widget informationBox(BuildContext context) {
   return Row(
@@ -26,11 +27,11 @@ Widget informationBox(BuildContext context) {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Lvl 10', style: TextStyle(color: Color(0xFF1B191C), fontSize: 16, fontWeight: FontWeight.w500)),
+                Obx(() => Text('Lvl ${UserController.level.value}', style: TextStyle(color: Color(0xFF1B191C), fontSize: 16, fontWeight: FontWeight.w500)),),
                 Row(
                   children: [
                     Image.asset('assets/icons/exp.png', width: 16),
-                    Text('200', style: TextStyle(color: Color(0xFF1B191C))),
+                    Obx(() => Text('${UserController.exp.value}', style: TextStyle(color: Color(0xFF1B191C)))),
                     Text('/200', style: TextStyle(color: Color.fromRGBO(27, 25, 28, 0.5), fontSize: 12)),
                   ],
                 )
@@ -48,14 +49,14 @@ Widget informationBox(BuildContext context) {
                   ),
                 ),
                 Positioned(
-                  child: Container(
-                    width: 70,
+                  child: Obx(() => Container(
+                    width: 140 * UserController.exp.value / 200,
                     height: 8,
                     decoration: BoxDecoration(
                       color: Color.fromRGBO(12, 12, 13, 1),
                       borderRadius: BorderRadius.circular(8)
                     ),
-                  )
+                  ))
                 )
               ],
             )

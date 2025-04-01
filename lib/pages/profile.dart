@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_coin_zone/controller/challenge.dart';
 import 'package:get/get.dart';
 import 'package:flutter_coin_zone/widget/information.dart';
 import 'package:flutter_coin_zone/controller/user.dart';
@@ -319,9 +320,11 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
   }
   // 成就
   Widget __challengeBox() {
-    return Column(
+    return Obx(() => Column(
       children: [
-        __challengeItem('Predict 3 times', 20, false, (){}),
+        __challengeItem('Predict 3 times', 20, ChallengeController.predictTimes.value >= 3, (){
+          UserController.increaseExp(20);
+        }),
         __challengeItem('Predicted for 2 consecutive days', 50, false, (){}),
         __challengeItem('Checked in for 3 consecutive days', 80, false, (){}),
         __challengeItem('Checked in for 7 consecutive days', 100, true, (){}),
@@ -330,7 +333,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
         __challengeItem('Successfully predicted 30 times', 900, true, (){}),
         __challengeItem('Successfully predicted 50 times', 2000, true, (){})
       ],
-    );
+    ));
   }
   // 成就单个区块
   Widget __challengeItem(text, exp, disabled, func) {
