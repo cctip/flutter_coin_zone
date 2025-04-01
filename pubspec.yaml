@@ -43,6 +43,9 @@ flutter:
     - assets/images/home/
     - assets/images/profile/
     - assets/images/lottery/
+    - assets/images/create/
+    - assets/images/stickers/
+    - assets/images/NFTs/
     - assets/images/splash.png
 
   fonts:
