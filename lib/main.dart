@@ -17,7 +17,6 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: ThemeData(
         fontFamily: 'Outfit',
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromRGBO(89, 0, 206, 1)),
       ),
       routes: {
         "/": (context) => IndexPage(),
