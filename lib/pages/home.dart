@@ -4,6 +4,7 @@ import 'package:flutter_coin_zone/widget/information.dart';
 import 'package:flutter_coin_zone/widget/prediction.dart';
 import 'package:flutter_coin_zone/widget/results.dart';
 import 'package:flutter_coin_zone/controller/user.dart';
+import 'package:flutter_coin_zone/common/utils.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -21,12 +22,18 @@ class HomePageState extends State<HomePage> {
   }
 
   getRequest() async {
-    BaseOptions options = BaseOptions();
+    BaseOptions options = BaseOptions(followRedirects: true);
     options.headers['X-CMC_PRO_API_KEY'] = '4cc00188-ea57-4fb0-aa41-f5f7f4d376bc';
     Dio dio = Dio(options);
     String url = 'https://pro-api.coinmarketcap.com/v1/blockchain/statistics/latest?symbol=BTC,ETH,SOL&convert=USD';
-    Response response = await dio.get(url);
-    print(response);
+    try {
+      Response response = await dio.get(url);
+      if (response.statusCode == 200) {
+        Utils.toast(context, 'success');
+      }
+    } catch (e) {
+      Utils.toast(context, '请求异常: $e');
+    }
   }
 
   @override
@@ -89,7 +96,7 @@ class HomePageState extends State<HomePage> {
                       child: Column(
                         children: [
                           resultsBox(context),
-                          predictionBox(),
+                          PredictionBox(),
                           SizedBox(height: MediaQuery.of(context).padding.bottom + 80)
                         ],
                       )

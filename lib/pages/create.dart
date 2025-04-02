@@ -284,6 +284,13 @@ class CreateViewState extends State<CreateView> {
                 contentPadding: EdgeInsets.symmetric(horizontal: 18, vertical: 10),
                 hintText: 'Enter text',
                 hintStyle: TextStyle(color: Color.fromRGBO(45, 42, 47, 0.3)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide(color: Colors.transparent),
+                ),
                 focusedBorder: OutlineInputBorder( // 聚焦状态边框
                   borderSide: BorderSide(color: Colors.transparent),
                   borderRadius: BorderRadius.circular(16),

@@ -50,69 +50,66 @@ class IndexPageState extends State<IndexPage> {
 
   Widget __bottomBar() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 40),
-      child: Container(
-        width: 324,
-        height: 64,
-        padding: EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(32),
-          color: Colors.black,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            InkWell(
-              child: SizedBox(
-                width: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    getItemIcon('create', currentIndex == 0),
-                    SizedBox(width: currentIndex == 0 ? 4 : 0),
-                    currentIndex == 0 ? Text('Create', style: TextStyle(color: Colors.white)) : Container()
-                  ],
-                ),
-              ),
-              onTapUp: (_) {
-                Navigator.pushNamed(context, 'create');
-              },
-            ),
-            InkWell(
-              child: SizedBox(
-                width: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    getItemIcon('home', currentIndex == 1),
-                    SizedBox(width: currentIndex == 1 ? 4 : 0),
-                    currentIndex == 1 ? Text('Home', style: TextStyle(color: Colors.white)) : Container()
-                  ],
-                ),
-              ),
-              onTapUp: (_) {
-                onTabChanged(1);
-              },
-            ),
-            InkWell(
-              child: SizedBox(
-                width: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    getItemIcon('profile', currentIndex == 2),
-                    SizedBox(width: currentIndex == 2 ? 4 : 0),
-                    currentIndex == 2 ? Text('Profile', style: TextStyle(color: Colors.white)) : Container()
-                  ],
-                ),
-              ),
-              onTapUp: (_) {
-                onTabChanged(2);
-              },
-            ),
-          ],
-        )
+      width: 324,
+      height: 64,
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(32),
+        color: Colors.black,
       ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          InkWell(
+            child: SizedBox(
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  getItemIcon('create', currentIndex == 0),
+                  SizedBox(width: currentIndex == 0 ? 4 : 0),
+                  currentIndex == 0 ? Text('Create', style: TextStyle(color: Colors.white)) : Container()
+                ],
+              ),
+            ),
+            onTapUp: (_) {
+              Navigator.pushNamed(context, 'create');
+            },
+          ),
+          InkWell(
+            child: SizedBox(
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  getItemIcon('home', currentIndex == 1),
+                  SizedBox(width: currentIndex == 1 ? 4 : 0),
+                  currentIndex == 1 ? Text('Home', style: TextStyle(color: Colors.white)) : Container()
+                ],
+              ),
+            ),
+            onTapUp: (_) {
+              onTabChanged(1);
+            },
+          ),
+          InkWell(
+            child: SizedBox(
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  getItemIcon('profile', currentIndex == 2),
+                  SizedBox(width: currentIndex == 2 ? 4 : 0),
+                  currentIndex == 2 ? Text('Profile', style: TextStyle(color: Colors.white)) : Container()
+                ],
+              ),
+            ),
+            onTapUp: (_) {
+              onTabChanged(2);
+            },
+          ),
+        ],
+      )
     );
   }
 }
