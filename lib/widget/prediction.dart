@@ -21,9 +21,6 @@ class PredictionBoxState extends State<PredictionBox> {
       'name': 'BTC',
       'subname': 'Bitcoin',
       'icon': 'assets/images/home/BTC.png',
-      'price': 87123.02,
-      'rate': 1.00,
-      'risePrice': 3901.23,
       'show': false,
     },
     {
@@ -31,9 +28,6 @@ class PredictionBoxState extends State<PredictionBox> {
       'name': 'ETH',
       'subname': 'Ethereum',
       'icon': 'assets/images/home/ETH.png',
-      'price': 2932.02,
-      'rate': -2.73,
-      'risePrice': -542.23,
       'show': false
     },
     {
@@ -41,9 +35,6 @@ class PredictionBoxState extends State<PredictionBox> {
       'name': 'SOL',
       'subname': 'Solana',
       'icon': 'assets/images/home/SOL.png',
-      'price': 87123.02,
-      'rate': 1.00,
-      'risePrice': 3901.23,
       'show': false
     },
   ];
@@ -272,7 +263,7 @@ class PredictionBoxState extends State<PredictionBox> {
           ),
           Row(
             children: [
-              Expanded(
+              data['predict'] != '' ? __progressBtn('Up', 70, true) : Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
@@ -282,12 +273,12 @@ class PredictionBoxState extends State<PredictionBox> {
                     disabledBackgroundColor: Color(0xFFEDEFF1),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  onPressed: () {},
+                  onPressed: timeText == 'Starts in' ? null : () {},
                   child: Text('Up', style: TextStyle(fontSize: 16))
                 ),
               ),
               SizedBox(width: 8),
-              Expanded(
+              data['predict'] != '' ? __progressBtn('Down', 100 - 70, false) : Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
@@ -297,7 +288,7 @@ class PredictionBoxState extends State<PredictionBox> {
                     disabledBackgroundColor: Color(0xFFEDEFF1),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  onPressed: () {},
+                  onPressed: timeText == 'Starts in' ? null : () {},
                   child: Text('Down', style: TextStyle(fontSize: 16))
                 ),
               )
@@ -308,22 +299,40 @@ class PredictionBoxState extends State<PredictionBox> {
     );
   }
 
+  Widget __progressBtn(name, progress, active) {
+    final btnWidth = (MediaQuery.of(context).size.width - 80 - 8) / 2;
+    return Container(
+      width: btnWidth,
+      height: 44,
+      clipBehavior: Clip.hardEdge,
+      decoration: BoxDecoration(
+        color: name == 'Up' ? Color.fromRGBO(58, 209, 100, 0.25) : Color.fromRGBO(255, 81, 81, 0.25),
+        border: Border.all(color: active ? name == 'Up' ? Color.fromRGBO(58, 209, 100, 1) : Color.fromRGBO(255, 81, 81, 1) : Colors.transparent),
+        borderRadius: BorderRadius.circular(16)
+      ),
+      child: Stack(
+        alignment: Alignment.centerLeft,
+        children: [
+          active ? Positioned(right: 8, child: Image.asset('assets/icons/voted.png', width: 16)) : Container(),
+          Container(
+            width: btnWidth * progress / 100,
+            height: 44,
+            padding: EdgeInsets.only(right: 8),
+            alignment: Alignment.centerRight,
+            decoration: BoxDecoration(
+              color: name == 'Up' ? Color.fromRGBO(58, 209, 100, 1) : Color.fromRGBO(255, 81, 81, 1),
+              borderRadius: BorderRadius.circular(16)
+            ),
+            child: Text('$name $progress%', style: TextStyle(color: Colors.white),),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
     super.dispose();
-  }
-}
-
-class PredictionItem extends StatefulWidget {
-  const PredictionItem({ super.key, name, subName, icon, price, rise, rate, risePrice, show });
-
-  @override
-  State<PredictionItem> createState() => PredictionItemState();
-}
-class PredictionItemState extends State<PredictionItem> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
   }
 }
