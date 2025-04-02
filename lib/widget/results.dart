@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_coin_zone/controller/prediction.dart';
+import 'package:get/get.dart';
 
 Widget resultsBox(context) {
   return Column(
@@ -9,15 +11,15 @@ Widget resultsBox(context) {
       Row(
         children: [
           Expanded(
-            child: __resultItem(context, 'BTC', 'BTC', '88,219.00', true, '1.00', 'Claim', (){})
+            child: __resultItem(context, 'BTC', 'BTC', PredictionController.btcOptions, 'Claim', (){})
           ),
           SizedBox(width: 10),
           Expanded(
-            child: __resultItem(context, 'ETH', 'ETH', '2,219.00', false, '2.12', 'Faild', null)
+            child: __resultItem(context, 'ETH', 'ETH', PredictionController.ethOptions, 'Faild', null)
           ),
           SizedBox(width: 10),
           Expanded(
-            child: __resultItem(context, 'SOL', 'SOL', '119.43', true, '0.12', 'Claimed', null)
+            child: __resultItem(context, 'SOL', 'SOL', PredictionController.solOptions, 'Claimed', null)
           ),
         ],
       ),
@@ -26,7 +28,7 @@ Widget resultsBox(context) {
   );
 }
 
-Widget __resultItem(context, icon, title, money, rise, rate, btn, func) {
+Widget __resultItem(context, icon, title, data, btn, func) {
   return Container(
     height: 134,
     padding: EdgeInsets.all(16),
@@ -53,14 +55,21 @@ Widget __resultItem(context, icon, title, money, rise, rate, btn, func) {
             Text(title, style: TextStyle(color: Color(0xFF1B191C), fontWeight: FontWeight.w500))
           ],
         ),
-        Column(
+        Obx(() => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('\$$money', style: TextStyle(fontSize: 12)),
+            Text('\$${data['price'].toStringAsFixed(2)}', style: TextStyle(fontSize: 12)),
             // ignore: prefer_interpolation_to_compose_strings
-            Text((rise?'+':'-')+'$rate%', style: TextStyle(color: Color(rise ? 0xFF3AD164 : 0xFFFF5151), fontSize: 12)),
+            Text(
+              '${data['rate'] >= 0 ? '+' : ''}${data['rate'].toStringAsFixed(2)}%',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: data['rate'] >= 0 ? Color(0xFF3AD164) : Color(0xFFFF5151)
+              )
+            )
           ],
-        ),
+        )),
         Container(
           width: MediaQuery.of(context).size.width,
           height: 22,

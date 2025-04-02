@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_coin_zone/common/utils.dart';
 import 'package:flutter_coin_zone/widget/information.dart';
 import 'package:flutter_coin_zone/widget/prediction.dart';
 import 'package:flutter_coin_zone/widget/results.dart';
 import 'package:flutter_coin_zone/controller/user.dart';
-import 'package:flutter_coin_zone/common/utils.dart';
+import 'package:flutter_coin_zone/controller/prediction.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,14 +26,77 @@ class HomePageState extends State<HomePage> {
     BaseOptions options = BaseOptions(followRedirects: true);
     options.headers['X-CMC_PRO_API_KEY'] = '4cc00188-ea57-4fb0-aa41-f5f7f4d376bc';
     Dio dio = Dio(options);
-    String url = 'https://pro-api.coinmarketcap.com/v1/blockchain/statistics/latest?symbol=BTC,ETH,SOL&convert=USD';
+    String url = 'https://pro-api.coinmarketcap.com/v1/blockchain/statistics/latest?limit=6';
     try {
+      print(1111);
       Response response = await dio.get(url);
+      print(response);
       if (response.statusCode == 200) {
-        Utils.toast(context, 'success');
+        Utils.toast(context, message: 'success');
       }
     } catch (e) {
-      Utils.toast(context, '请求异常: $e');
+      Utils.toast(context, message: '请求异常: $e');
+      print('请求异常: $e');
+      PredictionController.initBtc({
+        "quote": {
+          "USD": {
+            "price": 83992.70629169543,
+            "volume_24h": 28916722837.764206,
+            "volume_change_24h": 7.014,
+            "percent_change_1h": -0.40929091,
+            "percent_change_24h": 1.18201722,
+            "percent_change_7d": -4.03102322,
+            "percent_change_30d": -9.62605797,
+            "percent_change_60d": -17.9807943,
+            "percent_change_90d": -11.8420612,
+            "market_cap": 1666862553988.2407,
+            "market_cap_dominance": 61.8136,
+            "fully_diluted_market_cap": 1763846832125.6,
+            "tvl": null,
+            "last_updated": "2025-04-02T06:17:00.000Z"
+          }
+        }
+      });
+      PredictionController.initEth({
+        "quote": {
+          "USD": {
+            "price": 1870.494812331682,
+            "volume_24h": 14750568323.794884,
+            "volume_change_24h": -3.2437,
+            "percent_change_1h": 0.41346605,
+            "percent_change_24h": -0.71261704,
+            "percent_change_7d": -9.63994194,
+            "percent_change_30d": -20.85226139,
+            "percent_change_60d": -42.52637153,
+            "percent_change_90d": -45.21564353,
+            "market_cap": 225697545079.13095,
+            "market_cap_dominance": 8.316,
+            "fully_diluted_market_cap": 225697545079.13,
+            "tvl": null,
+            "last_updated": "2025-04-02T08:33:00.000Z"
+          }
+        }
+      },);
+      PredictionController.initSol({
+        "quote": {
+          "USD": {
+            "price": 125.55766959452826,
+            "volume_24h": 2996397742.4388075,
+            "volume_change_24h": -2.3007,
+            "percent_change_1h": 1.07310826,
+            "percent_change_24h": -3.04325686,
+            "percent_change_7d": -13.10574383,
+            "percent_change_30d": -21.78586342,
+            "percent_change_60d": -45.2438627,
+            "percent_change_90d": -38.99923981,
+            "market_cap": 64348856489.54331,
+            "market_cap_dominance": 2.3697,
+            "fully_diluted_market_cap": 75025277974.48,
+            "tvl": null,
+            "last_updated": "2025-04-02T08:33:00.000Z"
+          }
+        }
+      });
     }
   }
 

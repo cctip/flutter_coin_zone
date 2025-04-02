@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Utils {
-  static toast(context, message) {
+  static void toast(BuildContext context, { required message }) {
     showDialog(
       context: context,
       useSafeArea: false,
