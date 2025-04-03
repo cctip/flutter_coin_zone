@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_coin_zone/controller/challenge.dart';
 import 'package:get/get.dart';
 import 'package:flutter_coin_zone/widget/information.dart';
 import 'package:flutter_coin_zone/controller/user.dart';
 import 'package:flutter_coin_zone/controller/check.dart';
+import 'package:flutter_coin_zone/controller/challenge.dart';
+import 'package:flutter_coin_zone/controller/prediction.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -18,6 +19,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
   void initState() {
     super.initState();
     CheckController.init();
+    ChallengeController.init();
   }
 
 	@override
@@ -33,7 +35,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.fromLTRB(20, 0, 20, 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -97,7 +99,10 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                   children: [
                     Image.asset('assets/icons/star.png', width: 16),
                     SizedBox(width: 4),
-                    Obx(() => Text(UserController.points.value.toString(), style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500)))
+                    Obx(() => Text(
+                      '${UserController.points.value}',
+                      style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                    )
                   ],
                 )
               ],
@@ -116,7 +121,10 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Predictions', style: TextStyle(color: Color.fromRGBO(27, 25, 28, 0.5), fontSize: 12)),
-                Text('8', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                Obx(() => Text(
+                  '${PredictionController.predictTimes}',
+                  style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                )
               ],
             ),
           )
@@ -133,7 +141,10 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Successful', style: TextStyle(color: Color.fromRGBO(27, 25, 28, 0.5), fontSize: 12)),
-                Text('4', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                Obx(() => Text(
+                  '${PredictionController.predictSuccessTimes}',
+                  style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                )
               ],
             ),
           )
@@ -322,16 +333,30 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
   Widget __challengeBox() {
     return Obx(() => Column(
       children: [
-        __challengeItem('Predict 3 times', 20, ChallengeController.predictTimes.value >= 3, (){
+        __challengeItem('Predict 3 times', 20, PredictionController.predictTimes.value < 3, (){
           UserController.increaseExp(20);
         }),
-        __challengeItem('Predicted for 2 consecutive days', 50, false, (){}),
-        __challengeItem('Checked in for 3 consecutive days', 80, false, (){}),
-        __challengeItem('Checked in for 7 consecutive days', 100, true, (){}),
-        __challengeItem('Predicted for 7 consecutive days', 200, true, (){}),
-        __challengeItem('Successfully predicted 10 times', 300, true, (){}),
-        __challengeItem('Successfully predicted 30 times', 900, true, (){}),
-        __challengeItem('Successfully predicted 50 times', 2000, true, (){})
+        __challengeItem('Predicted for 2 consecutive days', 50, PredictionController.continuousPredict.value < 2, (){
+          UserController.increaseExp(50);
+        }),
+        __challengeItem('Checked in for 3 consecutive days', 80, false, (){
+          UserController.increaseExp(80);
+        }),
+        __challengeItem('Checked in for 7 consecutive days', 100, true, (){
+          UserController.increaseExp(100);
+        }),
+        __challengeItem('Predicted for 7 consecutive days', 200, PredictionController.predictTimes.value < 7, (){
+          UserController.increaseExp(200);
+        }),
+        __challengeItem('Successfully predicted 10 times', 300, PredictionController.predictSuccessTimes.value < 10, (){
+          UserController.increaseExp(300);
+        }),
+        __challengeItem('Successfully predicted 30 times', 900, PredictionController.predictSuccessTimes.value < 30, (){
+          UserController.increaseExp(900);
+        }),
+        __challengeItem('Successfully predicted 50 times', 2000, PredictionController.predictSuccessTimes.value < 50, (){
+          UserController.increaseExp(2000);
+        })
       ],
     ));
   }
@@ -377,7 +402,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
   // 我的NFT
   Widget __myNFT() {
     return Container(
-      height: MediaQuery.of(context).size.height - kToolbarHeight - 386 - MediaQuery.of(context).padding.bottom - 56,
+      height: MediaQuery.of(context).size.height - kToolbarHeight - 402 - MediaQuery.of(context).padding.bottom - 56,
     );
   }
 }
