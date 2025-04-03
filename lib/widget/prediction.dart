@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_coin_zone/controller/prediction.dart';
 import 'package:get/get.dart';
+import 'package:flutter_coin_zone/controller/prediction.dart';
+import 'package:flutter_coin_zone/common/utils.dart';
 
 class PredictionBox extends StatefulWidget {
   const PredictionBox({super.key});
@@ -62,9 +63,6 @@ class PredictionBoxState extends State<PredictionBox> {
   }
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingTime.inSeconds <= 0) {
-        timer.cancel();
-      }
       _calculateTime();
     });
   }
@@ -74,7 +72,8 @@ class PredictionBoxState extends State<PredictionBox> {
         "${(d.inSeconds % 60).toString().padLeft(2, '0')}";
   }
 
-  void _showRoleDialog() {
+  // Rule弹窗
+  void _showRuleDialog() {
     showDialog(
       context: context,
       useSafeArea: false,
@@ -150,23 +149,24 @@ class PredictionBoxState extends State<PredictionBox> {
             InkWell(
               child: Image.asset('assets/icons/info.png', width: 24),
               onTap: () {
-                _showRoleDialog();
+                _showRuleDialog();
               },
             )
           ],
         ),
         Column(
-          children: List.generate(predictionList.length, (index) => __predictionItem(predictionList[index])),
+          children: List.generate(predictionList.length, (index) => __predictionItem(predictionList[index], index)),
         )
       ],
     );
   }
 
-  Widget __predictionItem(item) {
+  Widget __predictionItem(item, index) {
     final data = item['data'] ?? {
       'price': 0.00,
       'rate': 0.00,
       'risePrice': 0.00,
+      'predict': ''
     };
     return Container(
       height: 244,
@@ -261,9 +261,9 @@ class PredictionBoxState extends State<PredictionBox> {
               ],
             )
           ),
-          Row(
+          Obx(() => Row(
             children: [
-              data['predict'] != '' ? __progressBtn('Up', 70, true) : Expanded(
+              data['predict'] != '' ? __progressBtn('Up', 42, data['predict'] == 'Up') : Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
@@ -273,12 +273,19 @@ class PredictionBoxState extends State<PredictionBox> {
                     disabledBackgroundColor: Color(0xFFEDEFF1),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  onPressed: timeText == 'Starts in' ? null : () {},
+                  onPressed: timeText == 'Starts in' ? null : () {
+                    switch(index) {
+                      case 0: PredictionController.onPredictBTC('Up'); break;
+                      case 1: PredictionController.onPredictETH('Up'); break;
+                      case 2: PredictionController.onPredictSOL('Up'); break;
+                    }
+                    Utils.showRewardDialog(context, points: 50);
+                  },
                   child: Text('Up', style: TextStyle(fontSize: 16))
                 ),
               ),
               SizedBox(width: 8),
-              data['predict'] != '' ? __progressBtn('Down', 100 - 70, false) : Expanded(
+              data['predict'] != '' ? __progressBtn('Down', 100 - 42, data['predict'] == 'Down') : Expanded(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
@@ -288,12 +295,18 @@ class PredictionBoxState extends State<PredictionBox> {
                     disabledBackgroundColor: Color(0xFFEDEFF1),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
-                  onPressed: timeText == 'Starts in' ? null : () {},
+                  onPressed: timeText == 'Starts in' ? null : () {
+                    switch(index) {
+                      case 0: PredictionController.onPredictBTC('Down'); break;
+                      case 1: PredictionController.onPredictETH('Down'); break;
+                      case 2: PredictionController.onPredictSOL('Down'); break;
+                    }
+                  },
                   child: Text('Down', style: TextStyle(fontSize: 16))
                 ),
               )
             ],
-          )
+          ))
         ],
       ),
     );
@@ -301,29 +314,43 @@ class PredictionBoxState extends State<PredictionBox> {
 
   Widget __progressBtn(name, progress, active) {
     final btnWidth = (MediaQuery.of(context).size.width - 80 - 8) / 2;
+    final baseColor = name == 'Up' ? Color.fromRGBO(58, 209, 100, 1) : Color.fromRGBO(255, 81, 81, 1);
+    final secColor = name == 'Up' ? Color.fromRGBO(58, 209, 100, 0.25) : Color.fromRGBO(255, 81, 81, 0.25);
+
     return Container(
       width: btnWidth,
       height: 44,
       clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
-        color: name == 'Up' ? Color.fromRGBO(58, 209, 100, 0.25) : Color.fromRGBO(255, 81, 81, 0.25),
-        border: Border.all(color: active ? name == 'Up' ? Color.fromRGBO(58, 209, 100, 1) : Color.fromRGBO(255, 81, 81, 1) : Colors.transparent),
+        color: secColor,
+        border: Border.all(color: active ? baseColor : Colors.transparent),
         borderRadius: BorderRadius.circular(16)
       ),
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
-          active ? Positioned(right: 8, child: Image.asset('assets/icons/voted.png', width: 16)) : Container(),
+          active ? Positioned(right: 8, child: Image.asset('assets/icons/${name == 'Up' ? 'predict_up' : 'predict_down'}.png', width: 16)) : Container(),
           Container(
             width: btnWidth * progress / 100,
             height: 44,
             padding: EdgeInsets.only(right: 8),
             alignment: Alignment.centerRight,
             decoration: BoxDecoration(
-              color: name == 'Up' ? Color.fromRGBO(58, 209, 100, 1) : Color.fromRGBO(255, 81, 81, 1),
+              color: baseColor,
               borderRadius: BorderRadius.circular(16)
             ),
-            child: Text('$name $progress%', style: TextStyle(color: Colors.white),),
+            child: Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                  right: progress < (name == 'Up' ? 42 : 52) ? (name == 'Up' ? -60 : -80) : 0,
+                  child: Text('$name $progress%', style: TextStyle(
+                    color: progress < (name == 'Up' ? 42 : 52) ? baseColor : Colors.white)
+                  )
+                )
+              ],
+            ),
           ),
         ],
       ),

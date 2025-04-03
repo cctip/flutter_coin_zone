@@ -11,9 +11,9 @@ class LotteryView extends StatefulWidget {
 
 class LotteryViewState extends State<LotteryView> with SingleTickerProviderStateMixin {
   final List<Image> prizes = [
-    Image.asset('assets/images/lottery/reward_star.png', width: 48),
-    Image.asset('assets/images/lottery/reward_exp.png', width: 48),
-    Image.asset('assets/images/lottery/reward_nft.png', width: 48),
+    Image.asset('assets/icons/star.png', width: 48),
+    Image.asset('assets/icons/exp.png', width: 48),
+    Image.asset('assets/icons/reward_nft.png', width: 48),
   ];
   final _scrollControllers = List.generate(3, (_) => ScrollController());
   final random = Random();
@@ -61,12 +61,12 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
 
     Widget _rewardImage() {
       if (_endIndex == 0) {
-        return Image.asset('assets/images/lottery/reward_star.png', width: 120);
+        return Image.asset('assets/icons/star.png', width: 120);
       } else if (_endIndex == 1) {
-        return Image.asset('assets/images/lottery/reward_exp.png', width: 120);
+        return Image.asset('assets/icons/reward_exp.png', width: 120);
       } else if (_endIndex == 2) {
         
-        return Image.asset('assets/images/lottery/reward_exp.png', width: 242);
+        return Image.asset('assets/icons/exp.png', width: 242);
       } else {
         return Container();
       }

@@ -19,6 +19,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     UserController.init();
+    PredictionController.init();
     getRequest();
   }
 
