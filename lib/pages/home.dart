@@ -24,13 +24,17 @@ class HomePageState extends State<HomePage> {
   }
 
   getRequest() async {
-    BaseOptions options = BaseOptions(followRedirects: true);
+    BaseOptions options = BaseOptions(
+      // connectTimeout: Duration(seconds: 5),
+      // sendTimeout: Duration(seconds: 5),
+    );
     options.headers['X-CMC_PRO_API_KEY'] = '4cc00188-ea57-4fb0-aa41-f5f7f4d376bc';
     Dio dio = Dio(options);
-    String url = 'https://pro-api.coinmarketcap.com/v1/blockchain/statistics/latest?limit=6';
+    // dio.interceptors.add(LogInterceptor()); // 添加日志拦截器
     try {
       print(1111);
-      Response response = await dio.get(url);
+      Response response = await dio.get('https://pro-api.coinmarketcap.com/v1/blockchain/statistics/latest?limit=6');
+      print('response-----');
       print(response);
       if (response.statusCode == 200) {
         Utils.toast(context, message: 'success');
