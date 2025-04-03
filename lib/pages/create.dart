@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import '/widget/draggable_widget.dart';
 
 class CreateView extends StatefulWidget {
   const CreateView({super.key});
@@ -8,8 +11,10 @@ class CreateView extends StatefulWidget {
 }
 
 class CreateViewState extends State<CreateView> {
-  int curTab = 0;
+  XFile bgImage = XFile(''); // 选择的背景图
+  int curTab = 0; // 当前操作栏
   List<Color> colorList = [
+    Color(0xFFEDEFF1),
     Color(0xFF5900CE),
     Color(0xFF00E09E),
     Color(0xFF4BC9FF),
@@ -20,6 +25,47 @@ class CreateViewState extends State<CreateView> {
   ];
   int curColor = 0;
   double curBlur = 0;
+
+  List<Image> stickerList = [
+    Image.asset('assets/images/stickers/sticker_2.png'),
+    Image.asset('assets/images/stickers/sticker_4.png'),
+    Image.asset('assets/images/NFTs/nft_1.png'),
+    Image.asset('assets/images/NFTs/nft_9.png'),
+  ];
+  List<WidgetData> widgetList = [];
+
+  // 打开相册选择图片
+  _openGallery() async {
+    XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    setState(() {
+      widgetList.add(WidgetData(
+        position: Offset(100, 100),
+        size: Size(100, 100),
+        angle: 0.0,
+        image: Image.asset('assets/images/stickers/sticker_1.png'),
+        onClose: () {}
+      ));
+      bgImage = image!;
+    });
+  }
+
+  // 新增可拖拽控件
+  _addDraggableWidget(Image image) {
+    int widgetLength = widgetList.length;
+    setState(() {
+      widgetList.add(WidgetData(
+        position: Offset(100, 100),
+        size: Size(100, 100),
+        angle: 0.0,
+        image: image,
+        onClose: () {
+          setState(() {
+            widgetList.removeAt(widgetLength);
+          });
+        }
+      ));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,12 +136,37 @@ class CreateViewState extends State<CreateView> {
 
   // 绘制面板
   Widget createPanel() {
-    return Container(
+    return Builder(builder: ((ctx) => Container(
+        clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: colorList[curColor],
-        borderRadius: BorderRadius.circular(40)
+        borderRadius: BorderRadius.circular(40),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromRGBO(119, 119, 119, 0.15),
+            offset: Offset(-2, -2),
+            blurRadius: 5,
+            spreadRadius: 0
+          ),
+          BoxShadow(
+            color: Color.fromRGBO(119, 119, 119, 0.15),
+            offset: Offset(2, 2), // 阴影偏移量 (水平, 垂直)
+            blurRadius: 5, // 阴影模糊程度
+            spreadRadius: 0, // 阴影扩散范围
+          ),
+        ]
       ),
-    );
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          Container(
+            height: MediaQuery.of(ctx).size.height,
+            child: bgImage.path != '' ? Image.file(File(bgImage.path)) : Container(),
+          ),
+          ...List.generate(widgetList.length, (index) => DraggableBoard(options: widgetList[index])),
+        ],
+      )
+    )));
   }
 
   // 操作面板
@@ -183,9 +254,7 @@ class CreateViewState extends State<CreateView> {
     Widget colorItem(int index) {
       return InkWell(
         onTap: () {
-          setState(() {
-            curColor = index;
-          });
+          setState(() { curColor = index; });
         },
         child: Container(
           width: 64,
@@ -208,14 +277,17 @@ class CreateViewState extends State<CreateView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Container(
-                width: 64,
-                height: 64,
-                padding: EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16)
+              InkWell(
+                onTap: _openGallery,
+                child: Container(
+                  width: 64,
+                  height: 64,
+                  padding: EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16)
+                  ),
+                  child: Image.asset('assets/images/create/photo.png', width: 56)
                 ),
-                child: Image.asset('assets/images/create/photo.png', width: 56)
               ),
               ...List.generate(colorList.length, (index) => colorItem(index)),
             ],
@@ -226,26 +298,6 @@ class CreateViewState extends State<CreateView> {
   }
   // Stickers
   Widget stickersBox() {
-    List<Image> stickerList = [
-      Image.asset('assets/images/stickers/sticker_2.png'),
-      Image.asset('assets/images/stickers/sticker_4.png'),
-      Image.asset('assets/images/NFTs/nft_1.png'),
-      Image.asset('assets/images/NFTs/nft_9.png'),
-    ];
-    Widget __stickerItem(Image image) {
-      return Container(
-        width: 68,
-        height: 68,
-        padding: EdgeInsets.all(6),
-        margin: EdgeInsets.only(left: 8),
-        decoration: BoxDecoration(
-          color: Color(0xFFF2F3F4),
-          borderRadius: BorderRadius.circular(16)
-        ),
-        child: image
-      );
-    }
-
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return SingleChildScrollView(
@@ -263,7 +315,24 @@ class CreateViewState extends State<CreateView> {
                 ),
                 child: Image.asset('assets/images/create/add.png', width: 32)
               ),
-              ...List.generate(stickerList.length, (index) => __stickerItem(stickerList[index])),
+              ...List.generate(stickerList.length, (index) => GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _addDraggableWidget(stickerList[index]);
+                  });
+                },
+                child: Container(
+                  width: 68,
+                  height: 68,
+                  padding: EdgeInsets.all(6),
+                  margin: EdgeInsets.only(left: 8),
+                  decoration: BoxDecoration(
+                    color: Color(0xFFF2F3F4),
+                    borderRadius: BorderRadius.circular(16)
+                  ),
+                  child: stickerList[index]
+                ),
+              )),
             ],
           ),
         );
