@@ -55,11 +55,11 @@ class SettingView extends StatelessWidget {
                   launchUrl(Uri.parse(''));
                 }
               ),
-              linkItem('Clear Cache', Container(), () {
-                SharePref.clear();
-                UserController.init();
-                CheckController.init();
-              }),
+              // linkItem('Clear Cache', Container(), () {
+              //   SharePref.clear();
+              //   UserController.init();
+              //   CheckController.init();
+              // }),
             ],
           ),
         ],

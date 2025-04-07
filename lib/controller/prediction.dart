@@ -22,21 +22,21 @@ class PredictionController extends GetxController {
 
   // 初始化BTC数据
   static initBtc(info) {
-    btcOptions['price'] = info['quote']['USD']['price'];
-    btcOptions['rate'] = info['quote']['USD']['percent_change_24h'];
-    btcOptions['risePrice'] = info['quote']['USD']['volume_change_24h'];
+    btcOptions['price'] = info['price'];
+    btcOptions['rate'] = info['percent_change_24h'];
+    btcOptions['risePrice'] = info['volume_change_24h'];
   }
   // 初始化ETH数据
   static initEth(info) {
-    ethOptions['price'] = info['quote']['USD']['price'];
-    ethOptions['rate'] = info['quote']['USD']['percent_change_24h'];
-    ethOptions['risePrice'] = info['quote']['USD']['volume_change_24h'];
+    ethOptions['price'] = info['price'];
+    ethOptions['rate'] = info['percent_change_24h'];
+    ethOptions['risePrice'] = info['volume_change_24h'];
   }
   // 初始化SOL数据
   static initSol(info) {
-    solOptions['price'] = info['quote']['USD']['price'];
-    solOptions['rate'] = info['quote']['USD']['percent_change_24h'];
-    solOptions['risePrice'] = info['quote']['USD']['volume_change_24h'];
+    solOptions['price'] = info['price'];
+    solOptions['rate'] = info['percent_change_24h'];
+    solOptions['risePrice'] = info['volume_change_24h'];
   }
 
   // 预测BTC

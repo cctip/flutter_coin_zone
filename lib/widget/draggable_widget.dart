@@ -17,10 +17,20 @@ class DraggableBoardState extends State<DraggableBoard> {
     onClose: () {}
   );
 
+  FocusNode focusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
     _widgetData = widget.options;
+
+    focusNode.addListener(() {
+      if (focusNode.hasFocus) {
+        print('得到焦点');
+      } else {
+        print('失去焦点');
+      }
+    });
   }
 
   @override
@@ -33,7 +43,7 @@ class DraggableBoardState extends State<DraggableBoard> {
         child: Transform.rotate(
           angle: _widgetData.angle,
           child: Container(
-            width: _widgetData.size.width,
+            width: _widgetData.size.height,
             height: _widgetData.size.height,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.white),
@@ -57,6 +67,7 @@ class DraggableBoardState extends State<DraggableBoard> {
     );
   }
 
+  // 移动
   void _handleMove(DragUpdateDetails details) {
     setState(() {
       _widgetData = _widgetData.copyWith(
@@ -103,32 +114,31 @@ class DraggableBoardState extends State<DraggableBoard> {
   }
 
   // 旋转
-  Widget _buildRotationHandle() {
-    return Container(
-      padding: EdgeInsets.only(bottom: 0),
-      child: GestureDetector(
-        onPanUpdate: _handleRotate,
-        child: Container(
-          width: 24,
-          height: 24,
-          decoration: BoxDecoration(
-            color: Colors.green,
-            shape: BoxShape.circle,
-          ),
-          child: Icon(Icons.rotate_right, size: 18, color: Colors.white),
-        ),
-      ),
-    );
-  }
-  void _handleRotate(DragUpdateDetails details) {
-    final center = _widgetData.center;
-    final localPosition = details.localPosition;
-    final angle = (localPosition - center).direction;
-    
-    setState(() {
-      _widgetData = _widgetData.copyWith(angle: angle);
-    });
-  }
+  // Widget _buildRotationHandle() {
+  //   return Container(
+  //     padding: EdgeInsets.only(bottom: 0),
+  //     child: GestureDetector(
+  //       onPanUpdate: _handleRotate,
+  //       child: Container(
+  //         width: 24,
+  //         height: 24,
+  //         decoration: BoxDecoration(
+  //           color: Colors.green,
+  //           shape: BoxShape.circle,
+  //         ),
+  //         child: Icon(Icons.rotate_right, size: 18, color: Colors.white),
+  //       ),
+  //     ),
+  //   );
+  // }
+  // void _handleRotate(DragUpdateDetails details) {
+  //   final center = _widgetData.center;
+  //   final localPosition = details.localPosition;
+  //   final angle = (localPosition - center).direction;
+  //   setState(() {
+  //     _widgetData = _widgetData.copyWith(angle: angle);
+  //   });
+  // }
 }
 
 class WidgetData {

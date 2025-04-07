@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,13 +43,19 @@ class PredictionBoxState extends State<PredictionBox> {
       'show': false
     },
   ];
+  int btcUpProgress = 0;
+  int ethUpProgress = 0;
+  int solUpProgress = 0;
 
   @override
   initState() {
     super.initState();
     _calculateTime();
     _startTimer();
+    _calculatePrtValue();
   }
+
+  // 计算倒计时
   void _calculateTime() {
     final now = DateTime.now();
     final today18 = DateTime(now.year, now.month, now.day, 18);
@@ -86,7 +93,7 @@ class PredictionBoxState extends State<PredictionBox> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 510,
+            height: 500,
             padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -122,6 +129,31 @@ class PredictionBoxState extends State<PredictionBox> {
         ],
       )
     );
+  }
+
+  // 计算预测值
+  _calculatePrtValue() {
+    final now = DateTime.now();
+    final today6 = DateTime(now.year, now.month, now.day, 6);
+    final today12 = DateTime(now.year, now.month, now.day, 12);
+    final today18 = DateTime(now.year, now.month, now.day, 18);
+    final today24 = DateTime(now.year, now.month, now.day, 24);
+    if (today6.isBefore(now) && today12.isAfter(now)) {
+      // 6-12点 上涨：生成（1%-60%）的随机数，下跌=(100%-上涨的随机数）
+      btcUpProgress = Random().nextInt(60) + 1;
+      ethUpProgress = Random().nextInt(60) + 1;
+      solUpProgress = Random().nextInt(60) + 1;
+    } else if (today12.isBefore(now) && today18.isAfter(now)) {
+      // 12-18点 上涨：生成（1%-50%）的随机数，下跌=(100%-上涨的随机数）
+      btcUpProgress = Random().nextInt(50) + 1;
+      ethUpProgress = Random().nextInt(50) + 1;
+      solUpProgress = Random().nextInt(50) + 1;
+    } else if (today18.isBefore(now) && today24.isAfter(now)) {
+      // 18-24点 上涨（1%-40%）的随机数，下跌=(100%-上涨的随机数）
+      btcUpProgress = Random().nextInt(40) + 1;
+      ethUpProgress = Random().nextInt(40) + 1;
+      solUpProgress = Random().nextInt(40) + 1;
+    }
   }
 
   @override
@@ -171,6 +203,12 @@ class PredictionBoxState extends State<PredictionBox> {
       'risePrice': 0.00,
       'predict': ''
     };
+    final spotsList = [
+      const [FlSpot(0, 10),FlSpot(1, 9),FlSpot(2, 9.5),FlSpot(3, 8.8),FlSpot(4, 8.5),FlSpot(5, 7.2),FlSpot(6, 6.3),FlSpot(7, 6.6),FlSpot(8, 5.3),FlSpot(9, 6.2),FlSpot(10, 3.7),FlSpot(11, 5.3),FlSpot(12, 2.1),FlSpot(13, 3.3),],
+      const [FlSpot(0, 9),FlSpot(1, 9),FlSpot(2, 9.5),FlSpot(3, 8.8),FlSpot(4, 9.5),FlSpot(5, 8.0),FlSpot(6, 8.3),FlSpot(7, 7.6),FlSpot(8, 8.3),FlSpot(9, 7.2),FlSpot(10, 4.7),FlSpot(11, 5.3),FlSpot(12, 4.1),FlSpot(13, 1.3),],
+      const [FlSpot(0, 8.7),FlSpot(1, 9.8),FlSpot(2, 9.0),FlSpot(3, 9.4),FlSpot(4, 8.5),FlSpot(5, 9.2),FlSpot(6, 6.3),FlSpot(7, 6.6),FlSpot(8, 6.3),FlSpot(9, 6.5),FlSpot(10, 7.2),FlSpot(11, 7.3),FlSpot(12, 5.1),FlSpot(13, 1.3),FlSpot(14, 1.2),]
+    ];
+    final progressList = [btcUpProgress, ethUpProgress, solUpProgress];
     return Stack(
       children: [
         Container(
@@ -230,6 +268,7 @@ class PredictionBoxState extends State<PredictionBox> {
                       height: 60,
                       child: LineChart(
                         LineChartData(
+                          lineTouchData: const LineTouchData(enabled: false),
                           gridData: FlGridData(show: false),
                           titlesData: FlTitlesData(
                             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
@@ -245,19 +284,7 @@ class PredictionBoxState extends State<PredictionBox> {
                               color: Colors.black,
                               barWidth: 2,
                               dotData: FlDotData(show: false),
-                              spots: const [
-                                FlSpot(0, 1),
-                                FlSpot(1, 0),
-                                FlSpot(2, 2.5),
-                                FlSpot(3, 5),
-                                FlSpot(4, 10),
-                                FlSpot(5, 53),
-                                FlSpot(6, 213),
-                                FlSpot(7, 55),
-                                FlSpot(8, 324),
-                                FlSpot(9, 65),
-                                FlSpot(10, 12),
-                              ]
+                              spots: spotsList[index]
                             )
                           ]
                         ),
@@ -268,7 +295,7 @@ class PredictionBoxState extends State<PredictionBox> {
               ),
               Obx(() => Row(
                 children: [
-                  data['predict'] != '' ? __progressBtn('Up', 42, data['predict'] == 'Up') : Expanded(
+                  data['predict'] != '' ? __progressBtn('Up', progressList[index], data['predict'] == 'Up') : Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),
@@ -290,7 +317,7 @@ class PredictionBoxState extends State<PredictionBox> {
                     ),
                   ),
                   SizedBox(width: 8),
-                  data['predict'] != '' ? __progressBtn('Down', 100 - 42, data['predict'] == 'Down') : Expanded(
+                  data['predict'] != '' ? __progressBtn('Down', 100 - progressList[index], data['predict'] == 'Down') : Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(horizontal: 0, vertical: 12),

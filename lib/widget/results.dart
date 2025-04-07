@@ -26,7 +26,7 @@ class ResultsBoxState extends State<ResultsBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return btcPrted || ethPrted || solPrted ? Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Results', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700)),
@@ -42,7 +42,7 @@ class ResultsBoxState extends State<ResultsBox> {
         ),
         SizedBox(height: 32)
       ],
-    );
+    ) : Container();
   }
 
   Widget __resultItem(icon, title, data, btn, func) {
