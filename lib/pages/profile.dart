@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_coin_zone/widget/information.dart';
-import 'package:flutter_coin_zone/controller/user.dart';
-import 'package:flutter_coin_zone/controller/check.dart';
-import 'package:flutter_coin_zone/controller/challenge.dart';
-import 'package:flutter_coin_zone/controller/prediction.dart';
+import '/common/utils.dart';
+import '/widget/information.dart';
+import '/controller/user.dart';
+import '/controller/check.dart';
+import '/controller/challenge.dart';
+import '/controller/prediction.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -21,6 +22,8 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
     CheckController.init();
     ChallengeController.init();
   }
+
+
 
 	@override
 	Widget build(BuildContext context) {
@@ -168,7 +171,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
             children: [
               Text('Checked in for', style: TextStyle(color: Color(0xFF2D2A2F), fontSize: 12)),
               SizedBox(width: 4),
-              Text('2 Days', style: TextStyle(color: Color(0xFF5900CE), fontSize: 16, fontWeight: FontWeight.w500)),
+              Obx(() => Text('${CheckController.signedCstTimes.value} Days', style: TextStyle(color: Color(0xFF5900CE), fontSize: 16, fontWeight: FontWeight.w500))),
               SizedBox(width: 4),
               Text('in a row', style: TextStyle(color: Color(0xFF2D2A2F), fontSize: 12)),
               Spacer(),
@@ -333,35 +336,22 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
   Widget __challengeBox() {
     return Obx(() => Column(
       children: [
-        __challengeItem('Predict 3 times', 20, PredictionController.predictTimes.value < 3, (){
-          UserController.increaseExp(20);
+        __challengeItem('Predict 3 times', 20, PredictionController.predictTimes.value < 3, ChallengeController.predict3.value, () {
+          Utils.showRewardDialog(context, exp: 20);
+          ChallengeController.claimPredict3();
         }),
-        __challengeItem('Predicted for 2 consecutive days', 50, PredictionController.continuousPredict.value < 2, (){
-          UserController.increaseExp(50);
-        }),
-        __challengeItem('Checked in for 3 consecutive days', 80, false, (){
-          UserController.increaseExp(80);
-        }),
-        __challengeItem('Checked in for 7 consecutive days', 100, true, (){
-          UserController.increaseExp(100);
-        }),
-        __challengeItem('Predicted for 7 consecutive days', 200, PredictionController.predictTimes.value < 7, (){
-          UserController.increaseExp(200);
-        }),
-        __challengeItem('Successfully predicted 10 times', 300, PredictionController.predictSuccessTimes.value < 10, (){
-          UserController.increaseExp(300);
-        }),
-        __challengeItem('Successfully predicted 30 times', 900, PredictionController.predictSuccessTimes.value < 30, (){
-          UserController.increaseExp(900);
-        }),
-        __challengeItem('Successfully predicted 50 times', 2000, PredictionController.predictSuccessTimes.value < 50, (){
-          UserController.increaseExp(2000);
-        })
+        __challengeItem('Predicted for 2 consecutive days', 50, PredictionController.continuousPredict.value < 2, ChallengeController.predictCst2.value, ChallengeController.claimPredictCst2),
+        __challengeItem('Checked in for 3 consecutive days', 80, CheckController.signedCstTimes.value < 3, ChallengeController.checkedCst3.value, ChallengeController.claimCheckedCst3),
+        __challengeItem('Checked in for 7 consecutive days', 100, CheckController.signedCstTimes.value < 7, ChallengeController.checkedCst7.value, ChallengeController.claimCheckedCst7),
+        __challengeItem('Predicted for 7 consecutive days', 200, PredictionController.predictTimes.value < 7, ChallengeController.predictCst7.value, ChallengeController.claimPredictCst7),
+        __challengeItem('Successfully predicted 10 times', 300, PredictionController.predictSuccessTimes.value < 10, ChallengeController.successPrt10.value, ChallengeController.claimSuccessPrt10),
+        __challengeItem('Successfully predicted 30 times', 900, PredictionController.predictSuccessTimes.value < 30, ChallengeController.successPrt30.value, ChallengeController.claimSuccessPrt30),
+        __challengeItem('Successfully predicted 50 times', 2000, PredictionController.predictSuccessTimes.value < 50, ChallengeController.successPrt50.value, ChallengeController.claimSuccessPrt50)
       ],
     ));
   }
   // 成就单个区块
-  Widget __challengeItem(text, exp, disabled, func) {
+  Widget __challengeItem(text, exp, disabled, claimed, func) {
     return Container(
       height: 56,
       margin: EdgeInsets.only(top: 8),
@@ -372,11 +362,14 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(text, style: TextStyle(color: Color(0xFF1B191C))),
-          SizedBox(
+          Container(
             height: 32,
-            child: ElevatedButton(
+            padding: EdgeInsets.only(right: claimed ? 10 : 0),
+            alignment: Alignment.center,
+            child: claimed ? Text('claimed', style: TextStyle(fontWeight: FontWeight.w400, color: Color(0xFF5900CE))) : ElevatedButton(
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 foregroundColor: Colors.white,
@@ -385,7 +378,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                 disabledBackgroundColor: Color.fromRGBO(45, 42, 47, 0.15),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               ),
-              onPressed: disabled ? null : func,
+              onPressed: disabled || claimed ? null : func,
               child: Row(
                 children: [
                   Text('+$exp', style: TextStyle(fontWeight: FontWeight.w400)),

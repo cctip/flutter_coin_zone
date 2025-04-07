@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_coin_zone/common/share_pref.dart';
-import 'package:flutter_coin_zone/controller/check.dart';
-import 'package:flutter_coin_zone/controller/user.dart';
+import '/common/share_pref.dart';
+import '/controller/check.dart';
+import '/controller/user.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingView extends StatelessWidget {

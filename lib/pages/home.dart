@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_coin_zone/common/utils.dart';
-import 'package:flutter_coin_zone/widget/information.dart';
-import 'package:flutter_coin_zone/widget/prediction.dart';
-import 'package:flutter_coin_zone/widget/results.dart';
-import 'package:flutter_coin_zone/controller/user.dart';
-import 'package:flutter_coin_zone/controller/prediction.dart';
+import '/common/utils.dart';
+import '/widget/information.dart';
+import '/widget/prediction.dart';
+import '/widget/results.dart';
+import '/controller/user.dart';
+import '/controller/prediction.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

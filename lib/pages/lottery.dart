@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_coin_zone/controller/user.dart';
+import '/controller/user.dart';
 import 'dart:math';
 
 class LotteryView extends StatefulWidget {

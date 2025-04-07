@@ -1,22 +1,27 @@
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_coin_zone/common/share_pref.dart';
-import 'package:flutter_coin_zone/controller/user.dart';
+import '/common/share_pref.dart';
+import '/controller/user.dart';
 
 var formater = DateFormat('yyyy-MM-dd');
 
 class CheckController extends GetxController {
   static final weekSignedTimes = [].obs; // 本周已签到日期
   static final isSignedToday = false.obs; // 今日是否已签到
+  static final signedCstTimes = 0.obs; // 连续签到天数
 
   // 初始化签到信息
   static init() {
+    signedCstTimes.value = SharePref.getInt('signedCstTimes') ?? 0;
+
     DateTime now = DateTime.now();
     int curYear = now.year; // 今年
     int curMonth = now.month; // 当月
-    int curDay = DateTime.now().day; // 今天
+    int curDay = DateTime.now().day; // 今日
     int weekday = DateTime.now().weekday; // 今天是本周的第几天
 
+    String today = formater.format(now); // 今天
+    String yestoday = formater.format(DateTime(curYear, curMonth, curDay - 1)); // 昨天
     String timeMonday = formater.format(DateTime(curYear, curMonth, curDay - weekday + 1)); // 周一
     String timeTuesday = formater.format(DateTime(curYear, curMonth, curDay - weekday + 2)); // 周二
     String timeWednesday = formater.format(DateTime(curYear, curMonth, curDay - weekday + 3)); // 周三
@@ -27,7 +32,8 @@ class CheckController extends GetxController {
 
     weekSignedTimes.value = [];
     List<String> historyTimes = SharePref.getStringList('sign_times') ?? [];
-    if (historyTimes.contains(formater.format(now))) isSignedToday.value = true;
+    if (!historyTimes.contains(yestoday)) signedCstTimes.value = historyTimes.contains(today) ? 1 : 0; // 昨天没有签到
+    if (historyTimes.contains(today)) isSignedToday.value = true; // 今天已签到
     if (historyTimes.contains(timeMonday)) weekSignedTimes.add('1');
     if (historyTimes.contains(timeTuesday)) weekSignedTimes.add('2');
     if (historyTimes.contains(timeWednesday)) weekSignedTimes.add('3');
@@ -40,9 +46,10 @@ class CheckController extends GetxController {
   // 今日签到
   static onSignToday() {
     DateTime now = DateTime.now();
-    var today = formater.format(now);
+    String today = formater.format(now);
     List<String> historyTimes = SharePref.getStringList('sign_times') ?? [];
     if (!historyTimes.contains(today)) {
+      SharePref.setInt('signedCstTimes', signedCstTimes.value + 1);
       SharePref.setStringList('sign_times', [...historyTimes, today]);
       UserController.increasePoint(10);
       init();

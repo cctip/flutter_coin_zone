@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_coin_zone/controller/prediction.dart';
+import '/controller/prediction.dart';
 import 'package:get/get.dart';
 
 Widget resultsBox(context) {

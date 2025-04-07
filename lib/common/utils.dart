@@ -52,7 +52,7 @@ class Utils {
                       Spacer(),
                       Row(
                         children: [
-                          Expanded(child: Container(
+                          points ? Expanded(child: Container(
                             height: 48,
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -63,10 +63,10 @@ class Utils {
                               children: [
                                 Image.asset('assets/icons/star.png', width: 32),
                                 SizedBox(width: 8),
-                                Text('30', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                                Text('$points', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
                               ]
                             ),
-                          )),
+                          )) : Container(),
                           SizedBox(width: 16),
                           Expanded(child: Container(
                             height: 48,
@@ -79,7 +79,7 @@ class Utils {
                               children: [
                                 Image.asset('assets/icons/exp.png', width: 32),
                                 SizedBox(width: 8),
-                                Text('30', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
+                                Text('$exp', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
                               ]
                             ),
                           )),

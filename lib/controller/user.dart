@@ -1,4 +1,4 @@
-import 'package:flutter_coin_zone/common/share_pref.dart';
+import '/common/share_pref.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
@@ -10,7 +10,7 @@ class UserController extends GetxController {
   // 初始化
   static init() {
     points.value = SharePref.getInt('points') ?? 0;
-    level.value = SharePref.getInt('level') ?? 0;
+    level.value = SharePref.getInt('level') ?? 1;
     exp.value = SharePref.getInt('exp') ?? 0;
   }
 

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:flutter_coin_zone/common/share_pref.dart';
+import '/common/share_pref.dart';
 
 class PredictionController extends GetxController {
   static final btcOptions = RxMap({ 'price': 0.00, 'rate': 0.00, 'risePrice': 0.00, 'predict': '' });

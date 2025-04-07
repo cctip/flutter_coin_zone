@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_coin_zone/controller/prediction.dart';
-import 'package:flutter_coin_zone/common/utils.dart';
+import '/controller/prediction.dart';
+import '/common/utils.dart';
 
 class PredictionBox extends StatefulWidget {
   const PredictionBox({super.key});
@@ -279,7 +279,7 @@ class PredictionBoxState extends State<PredictionBox> {
                       case 1: PredictionController.onPredictETH('Up'); break;
                       case 2: PredictionController.onPredictSOL('Up'); break;
                     }
-                    Utils.showRewardDialog(context, points: 50);
+                    Utils.showRewardDialog(context, points: 20, exp: 10);
                   },
                   child: Text('Up', style: TextStyle(fontSize: 16))
                 ),
@@ -301,6 +301,7 @@ class PredictionBoxState extends State<PredictionBox> {
                       case 1: PredictionController.onPredictETH('Down'); break;
                       case 2: PredictionController.onPredictSOL('Down'); break;
                     }
+                    Utils.showRewardDialog(context, points: 20, exp: 10);
                   },
                   child: Text('Down', style: TextStyle(fontSize: 16))
                 ),
