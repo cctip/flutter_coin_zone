@@ -15,6 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  bool _loading = false;
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +26,7 @@ class HomePageState extends State<HomePage> {
   }
 
   getRequest() async {
+    setState(() => _loading = true);
     BaseOptions options = BaseOptions(
       // connectTimeout: Duration(seconds: 5),
       // sendTimeout: Duration(seconds: 5),
@@ -34,14 +37,18 @@ class HomePageState extends State<HomePage> {
     try {
       print(1111);
       Response response = await dio.get('https://pro-api.coinmarketcap.com/v1/blockchain/statistics/latest?limit=6');
+      setState(() => _loading = false);
       print('response-----');
       print(response);
       if (response.statusCode == 200) {
         Utils.toast(context, message: 'success');
       }
     } catch (e) {
+      setState(() => _loading = false);
       Utils.toast(context, message: '请求异常: $e');
       print('请求异常: $e');
+
+      // 数据异常mock数据
       PredictionController.initBtc({
         "quote": {
           "USD": {
@@ -164,8 +171,8 @@ class HomePageState extends State<HomePage> {
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
-                          resultsBox(context),
-                          PredictionBox(),
+                          ResultsBox(loading: _loading),
+                          PredictionBox(loading: _loading),
                           SizedBox(height: MediaQuery.of(context).padding.bottom + 80)
                         ],
                       )

@@ -19,7 +19,7 @@ class Utils {
     );
   }
 
-  static void showRewardDialog(context, { points, exp }) {
+  static void showRewardDialog(BuildContext context, { points, exp }) {
     showDialog(
       context: context,
       useSafeArea: false,
@@ -52,7 +52,7 @@ class Utils {
                       Spacer(),
                       Row(
                         children: [
-                          points ? Expanded(child: Container(
+                          points != null ? Expanded(child: Container(
                             height: 48,
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -67,8 +67,8 @@ class Utils {
                               ]
                             ),
                           )) : Container(),
-                          SizedBox(width: 16),
-                          Expanded(child: Container(
+                          SizedBox(width: points != null ? 16 : 0),
+                          points != null ? Expanded(child: Container(
                             height: 48,
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -82,7 +82,7 @@ class Utils {
                                 Text('$exp', style: TextStyle(color: Color(0xFF0C0C0D), fontSize: 16, fontWeight: FontWeight.w500))
                               ]
                             ),
-                          )),
+                          )) : Container(),
                         ],
                       )
                     ],

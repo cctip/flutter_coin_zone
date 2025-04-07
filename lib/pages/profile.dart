@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '/common/utils.dart';
 import '/widget/information.dart';
 import '/controller/user.dart';
 import '/controller/check.dart';
@@ -336,10 +335,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
   Widget __challengeBox() {
     return Obx(() => Column(
       children: [
-        __challengeItem('Predict 3 times', 20, PredictionController.predictTimes.value < 3, ChallengeController.predict3.value, () {
-          Utils.showRewardDialog(context, exp: 20);
-          ChallengeController.claimPredict3();
-        }),
+        __challengeItem('Predict 3 times', 20, PredictionController.predictTimes.value < 3, ChallengeController.predict3.value, ChallengeController.claimPredict3),
         __challengeItem('Predicted for 2 consecutive days', 50, PredictionController.continuousPredict.value < 2, ChallengeController.predictCst2.value, ChallengeController.claimPredictCst2),
         __challengeItem('Checked in for 3 consecutive days', 80, CheckController.signedCstTimes.value < 3, ChallengeController.checkedCst3.value, ChallengeController.claimCheckedCst3),
         __challengeItem('Checked in for 7 consecutive days', 100, CheckController.signedCstTimes.value < 7, ChallengeController.checkedCst7.value, ChallengeController.claimCheckedCst7),

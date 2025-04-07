@@ -16,12 +16,13 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
     Image.asset('assets/icons/reward_nft.png', width: 48),
   ];
   final _scrollControllers = List.generate(3, (_) => ScrollController());
-  final random = Random();
+  final List<double> _randomOffsets = [0, 0, 0];
   late AnimationController _animationController;
   final double _itemHeight = 70;
   bool runing = false;
   int _endingCount = 0;
   int _endIndex = 0;
+  String spinType = '';
 
   @override
   void initState() {
@@ -32,23 +33,37 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
     );
   }
 
-  void _startSpin() {
+  // 开始抽奖
+  void _startSpin(type) {
     if (runing) return;
+    if (type == 'free' && UserController.freeSpined.value) return;
+    if (type == 'fee' && (UserController.points.value < 500)) return;
+    spinType = type;
     _animationController.reset();
     setState(() {
       runing = true;
-      _endIndex = random.nextInt(3);
+      _endIndex = Random().nextInt(3);
     });
+
+    // 递归随机数生成
+    getRandom(index) {
+      double randomOffset = (Random().nextInt(20) + 5) * _itemHeight * prizes.length + _endIndex * _itemHeight; // 保证完整滚动圈数
+      if (randomOffset > _randomOffsets[index] - 1000 && randomOffset < _randomOffsets[index] + 1000) {
+        randomOffset = getRandom(index);
+      }
+      _randomOffsets[index] = randomOffset;
+      return randomOffset;
+    }
     _scrollControllers.asMap().forEach((index, controller) {
-      final randomOffset = (random.nextInt(20) + 5) * _itemHeight * prizes.length + _endIndex * _itemHeight; // 保证完整滚动圈数
       controller.animateTo(
-        randomOffset,
+        getRandom(index),
         duration: Duration(seconds: 3),
         curve: Curves.easeOutQuart,
       );
     });
   }
 
+  // 结束抽奖
   void _endSpin() {
     setState(() {
       _endingCount++;
@@ -58,19 +73,36 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
       }
     });
     if (runing) return;
+    if (spinType == 'free') {
+      UserController.onFreeSpin();
+    } else {
+      UserController.decreasePoint(500);
+    }
 
+    int starCount = 0;
+    int expCount = 0;
+    if (_endIndex == 0) {
+      int n = Random().nextInt(200) + 1; // 1到200随机数
+      starCount = 5 * n;
+      UserController.increasePoint(starCount);
+    } else if (_endIndex == 1) {
+      int n = Random().nextInt(50) + 1; // 1到50随机数
+      expCount = 10 * n;
+      UserController.increaseExp(expCount);
+    } else if (_endIndex == 2) {
+    }
     Widget _rewardImage() {
       if (_endIndex == 0) {
         return Image.asset('assets/icons/star.png', width: 120);
       } else if (_endIndex == 1) {
-        return Image.asset('assets/icons/reward_exp.png', width: 120);
+        return Image.asset('assets/icons/exp.png', width: 120);
       } else if (_endIndex == 2) {
-        
         return Image.asset('assets/icons/exp.png', width: 242);
       } else {
         return Container();
       }
     }
+    
     showDialog(
       context: context,
       useSafeArea: false,
@@ -123,7 +155,7 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
                   children: [
                     Image.asset('assets/icons/${_endIndex == 0 ? 'star' : 'exp'}.png', width: 32),
                     SizedBox(width: 8),
-                    Text('40', style: TextStyle(
+                    Text(_endIndex == 0 ? '$starCount' : '$expCount', style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.w700,
@@ -216,13 +248,16 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
             Container(
               margin: EdgeInsets.only(top: 68),
               child: InkWell(
-                onTap: _startSpin,
-                child: Image.asset('assets/images/lottery/btn_FreeSpin.png', height: 54),
+                onTap: () { _startSpin('free'); },
+                child: Image.asset('assets/images/lottery/${UserController.freeSpined.value ? 'btn_FreeSpined' : 'btn_FreeSpin'}.png', height: 54),
               ),
             ),
             Container(
               margin: EdgeInsets.only(top: 16),
-              child: Image.asset('assets/images/lottery/btn_UseSpin.png', height: 54),
+              child: InkWell(
+                onTap: () { _startSpin('fee'); },
+                child: Image.asset('assets/images/lottery/${UserController.points.value < 500 ? 'btn_UseSpined' : 'btn_UseSpin'}.png', height: 54),
+              ),
             )
           ],
         ),
@@ -259,7 +294,7 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
       ),
       child: NotificationListener<ScrollNotification>(
         onNotification: (notification) {
-          switch (notification.runtimeType){
+          switch (notification.runtimeType) {
             case ScrollEndNotification: _endSpin(); break;
           }
           return true;
