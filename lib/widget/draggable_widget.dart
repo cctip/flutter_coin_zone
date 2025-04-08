@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '/controller/create.dart';
 
 class DraggableBoard extends StatefulWidget {
   const DraggableBoard({super.key, required this.options});
@@ -10,27 +12,19 @@ class DraggableBoard extends StatefulWidget {
 
 class DraggableBoardState extends State<DraggableBoard> {
   WidgetData _widgetData = WidgetData(
+    key: 'widget_test',
     position: Offset(0, 0),
     size: Size(100, 100),
     angle: 0.0,
     image: Image.asset('assets/images/stickers/sticker_1.png'),
     onClose: () {}
   );
-
-  FocusNode focusNode = FocusNode();
+  bool get _isFocus => CreateController.focusNodeKey.value == _widgetData.key;
 
   @override
   void initState() {
     super.initState();
     _widgetData = widget.options;
-
-    focusNode.addListener(() {
-      if (focusNode.hasFocus) {
-        print('得到焦点');
-      } else {
-        print('失去焦点');
-      }
-    });
   }
 
   @override
@@ -39,17 +33,20 @@ class DraggableBoardState extends State<DraggableBoard> {
       left: _widgetData.position.dx,
       top: _widgetData.position.dy,
       child: GestureDetector(
+        onTap: () {
+          CreateController.onFocus(_widgetData.key);
+        },
         onPanUpdate: _handleMove,
         child: Transform.rotate(
           angle: _widgetData.angle,
-          child: Container(
+          child: Obx(() => Container(
             width: _widgetData.size.height,
             height: _widgetData.size.height,
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.white),
+              border: Border.all(color: _isFocus ? Colors.white : Colors.transparent),
               borderRadius: BorderRadius.circular(4)
             ),
-            child: Stack(
+            child: _isFocus ? Stack(
               clipBehavior: Clip.none,
               children: [
                 _widgetData.image,
@@ -60,8 +57,8 @@ class DraggableBoardState extends State<DraggableBoard> {
                 // 大小调整控制点（右下角）
                 _buildResizeHandle(),
               ],
-            ),
-          ),
+            ) : _widgetData.image,
+          )),
         ),
       ),
     );
@@ -89,6 +86,7 @@ class DraggableBoardState extends State<DraggableBoard> {
   }
   _handleClose() {
     _widgetData.onClose();
+    CreateController.decWidget();
   }
 
   // 大小调整
@@ -142,6 +140,7 @@ class DraggableBoardState extends State<DraggableBoard> {
 }
 
 class WidgetData {
+  final String key;
   final Offset position;
   final Size size;
   final double angle;
@@ -149,6 +148,7 @@ class WidgetData {
   final Function onClose;
 
   WidgetData({
+    required this.key,
     required this.position,
     required this.size,
     required this.angle,
@@ -166,7 +166,9 @@ class WidgetData {
     Size? size,
     double? angle,
   }) {
+    CreateController.onFocus(key);
     return WidgetData(
+      key: key,
       position: position ?? this.position,
       size: size ?? this.size,
       angle: angle ?? this.angle,

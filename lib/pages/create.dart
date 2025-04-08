@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '/widget/draggable_widget.dart';
+import '/controller/create.dart';
 
 class CreateView extends StatefulWidget {
   const CreateView({super.key});
@@ -11,6 +12,7 @@ class CreateView extends StatefulWidget {
 }
 
 class CreateViewState extends State<CreateView> {
+  bool get savable => CreateController.widgetCount.value > 0;
   XFile bgImage = XFile(''); // 选择的背景图
   int curTab = 0; // 当前操作栏
   List<Color> colorList = [
@@ -37,15 +39,20 @@ class CreateViewState extends State<CreateView> {
   // 打开相册选择图片
   _openGallery() async {
     XFile? image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image == null) return;
     setState(() {
+      String key = 'widget_${widgetList.length + 1}';
       widgetList.add(WidgetData(
+        key: key,
         position: Offset(100, 100),
         size: Size(100, 100),
         angle: 0.0,
-        image: Image.asset('assets/images/stickers/sticker_1.png'),
+        image: Image.file(File(image.path)),
         onClose: () {}
       ));
-      bgImage = image!;
+      CreateController.incWidget();
+      CreateController.onFocus(key);
+      // bgImage = image;
     });
   }
 
@@ -53,7 +60,9 @@ class CreateViewState extends State<CreateView> {
   _addDraggableWidget(Image image) {
     int widgetLength = widgetList.length;
     setState(() {
+      String key = 'widget_${widgetList.length + 1}';
       widgetList.add(WidgetData(
+        key: key,
         position: Offset(100, 100),
         size: Size(100, 100),
         angle: 0.0,
@@ -64,24 +73,114 @@ class CreateViewState extends State<CreateView> {
           });
         }
       ));
+      CreateController.incWidget();
+      CreateController.onFocus(key);
     });
+  }
+
+  // 保存到我的NFT
+  _onSave() {
+    showDialog(
+      context: context,
+      useSafeArea: false,
+      builder: (_) => Stack(
+        alignment: Alignment.center,
+        children: [
+          Image.asset('assets/images/create/result_bg.png'),
+          Positioned(child: Column(
+            children: [
+              Container(
+                height: MediaQuery.of(context).padding.top + 64,
+                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 16),
+                alignment: Alignment.centerLeft,
+                child: GestureDetector(
+                  child: Image.asset('assets/icons/arrow_left.png', width: 32),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              SizedBox(height: 32),
+              Container(
+                width: 185,
+                height: 247,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  color: Colors.amber
+                ),
+              ),
+              SizedBox(height: 24),
+              Text(
+                'Saved Successfully',
+                style: TextStyle(
+                  color: Color(0xFF1B191C),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Outfit',
+                  decoration: TextDecoration.none
+                )
+              ),
+              SizedBox(height: 64),
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 48,
+                height: 54,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.all(0),
+                    foregroundColor: Colors.white,
+                    backgroundColor: Color(0xFF0C0C0D),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // 点击内容区域关闭
+                  },
+                  child: Text('Continue Creating', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))
+                ),
+              ),
+              SizedBox(height: 24),
+              SizedBox(
+                width: MediaQuery.of(context).size.width - 48,
+                height: 54,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    padding: EdgeInsets.all(0),
+                    foregroundColor: Color(0xFF1B191C),
+                    backgroundColor: Colors.transparent,
+                    shadowColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                    side: BorderSide(color: Color(0xFF0C0C0D), width: 1),
+                  ),
+                  onPressed: () {},
+                  child: Text('Back home', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))
+                ),
+              ),
+            ],
+          ))
+        ],
+      )
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFF2F3F4),
-      body: Column(
-        children: [
-          header(),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(16),
-              child: createPanel(),
-            )
-          ),
-          controlPanel()
-        ],
+      body: GestureDetector(
+        onTapCancel: CreateController.cancelFocus,
+        onTap: CreateController.cancelFocus,
+        child: Column(
+          children: [
+            header(),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(16),
+                child: createPanel(),
+              )
+            ),
+            controlPanel()
+          ],
+        )
       )
     );
   }
@@ -99,6 +198,7 @@ class CreateViewState extends State<CreateView> {
             child: InkWell(
               child: Image.asset('assets/icons/close.png', width: 32),
               onTap: () {
+                CreateController.clearWidget();
                 Navigator.pop(context);
               },
             )
@@ -124,7 +224,7 @@ class CreateViewState extends State<CreateView> {
                   disabledBackgroundColor: Color(0xFFEDEFF1),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                 ),
-                onPressed: () {},
+                onPressed: savable ? _onSave : null,
                 child: Text('Save', style: TextStyle(fontSize: 16))
               ),
             )
@@ -137,7 +237,7 @@ class CreateViewState extends State<CreateView> {
   // 绘制面板
   Widget createPanel() {
     return Builder(builder: ((ctx) => Container(
-        clipBehavior: Clip.hardEdge,
+      clipBehavior: Clip.hardEdge,
       decoration: BoxDecoration(
         color: colorList[curColor],
         borderRadius: BorderRadius.circular(40),
@@ -159,7 +259,7 @@ class CreateViewState extends State<CreateView> {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Container(
+          SizedBox(
             height: MediaQuery.of(ctx).size.height,
             child: bgImage.path != '' ? Image.file(File(bgImage.path)) : Container(),
           ),
