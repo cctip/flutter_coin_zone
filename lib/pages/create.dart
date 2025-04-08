@@ -151,7 +151,10 @@ class CreateViewState extends State<CreateView> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                     side: BorderSide(color: Color(0xFF0C0C0D), width: 1),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    CreateController.clearWidget();
+                    Navigator.popUntil(context, ModalRoute.withName('/'));
+                  },
                   child: Text('Back home', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))
                 ),
               ),

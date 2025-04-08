@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '/controller/prediction.dart';
+import '/common/utils.dart';
 
 class ResultsBox extends StatefulWidget {
   final bool loading;
@@ -12,40 +13,73 @@ class ResultsBox extends StatefulWidget {
 }
 
 class ResultsBoxState extends State<ResultsBox> {
-  bool btcPrted = false;
-  bool ethPrted = false;
-  bool solPrted = false;
+  bool get btcPrted => PredictionController.btcOptions['predict'] != '';
+  bool get ethPrted => PredictionController.ethOptions['predict'] != '';
+  bool get solPrted => PredictionController.solOptions['predict'] != '';
 
   @override
   initState() {
     super.initState();
-    btcPrted = PredictionController.btcOptions['predict'] != '';
-    ethPrted = PredictionController.ethOptions['predict'] != '';
-    solPrted = PredictionController.solOptions['predict'] != '';
   }
 
   @override
   Widget build(BuildContext context) {
-    return btcPrted || ethPrted || solPrted ? Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Results', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700)),
         SizedBox(height: 12),
-        Row(
+        Obx(() => Row(
           children: [
-            btcPrted ? __resultItem('BTC', 'BTC', PredictionController.btcOptions, 'Claim', (){}) : Container(),
+            btcPrted ? __resultItem('BTC') : Container(),
             SizedBox(width: btcPrted ? 10 : 0),
-            ethPrted ? __resultItem('ETH', 'ETH', PredictionController.ethOptions, 'Faild', null) : Container(),
+            ethPrted ? __resultItem('ETH') : Container(),
             SizedBox(width: ethPrted ? 10 : 0),
-            solPrted ? __resultItem('SOL', 'SOL', PredictionController.solOptions, 'Claimed', null) : Container(),
+            solPrted ? __resultItem('SOL') : Container(),
           ],
-        ),
-        SizedBox(height: 32)
+        )),
+        SizedBox(height: 20)
       ],
-    ) : Container();
+    );
   }
 
-  Widget __resultItem(icon, title, data, btn, func) {
+  Widget __resultItem(title) {
+    var _icon, _resultData, _success, _resultRate, _claimed, _func;
+    switch(title) {
+      case 'BTC':
+        _icon = 'BTC';
+        _resultData = PredictionController.btcOptions['price'];
+        _success = PredictionController.resultBTC.value;
+        _resultRate = PredictionController.resultRateBTC.value;
+        _claimed = PredictionController.claimedBTC.value;
+        _func = () {
+          Utils.showRewardDialog(context, points: 50, exp: 20);
+          PredictionController.onClaimBTC();
+        };
+        break;
+      case 'ETH':
+        _icon = 'ETH';
+        _resultData = PredictionController.ethOptions['price'];
+        _success = PredictionController.resultETH.value;
+        _resultRate = PredictionController.resultRateETH.value;
+        _claimed = PredictionController.claimedETH.value;
+        _func = () {
+          Utils.showRewardDialog(context, points: 50, exp: 20);
+          PredictionController.onClaimETH();
+        };
+        break;
+      case 'SOL':
+        _icon = 'SOL';
+        _resultData = PredictionController.solOptions['price'];
+        _success = PredictionController.resultSOL.value;
+        _resultRate = PredictionController.resultRateSOL.value;
+        _claimed = PredictionController.claimedSOL.value;
+        _func = () {
+          Utils.showRewardDialog(context, points: 50, exp: 20);
+          PredictionController.onClaimSOL();
+        };
+        break;
+    }
     return Stack(
       children: [
         Container(
@@ -70,25 +104,25 @@ class ResultsBoxState extends State<ResultsBox> {
             children: [
               Row(
                 children: [
-                  Image.asset('assets/images/home/$icon.png', width: 32),
+                  Image.asset('assets/images/home/$_icon.png', width: 32),
                   SizedBox(width: 8),
                   Text(title, style: TextStyle(color: Color(0xFF1B191C), fontWeight: FontWeight.w500))
                 ],
               ),
-              Obx(() => Column(
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('\$${data['price'].toStringAsFixed(2)}', style: TextStyle(fontSize: 12)),
+                  Text('\$${_resultData.toStringAsFixed(2)}', style: TextStyle(fontSize: 12)),
                   Text(
-                    '${data['rate'] >= 0 ? '+' : ''}${data['rate'].toStringAsFixed(2)}%',
+                    '${_resultRate >= 0 ? '+' : ''}${_resultRate.toStringAsFixed(2)}%',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
-                      color: data['rate'] >= 0 ? Color(0xFF3AD164) : Color(0xFFFF5151)
+                      color: _resultRate >= 0 ? Color(0xFF3AD164) : Color(0xFFFF5151)
                     )
                   )
                 ],
-              )),
+              ),
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 22,
@@ -104,8 +138,8 @@ class ResultsBoxState extends State<ResultsBox> {
                     disabledBackgroundColor: Color.fromRGBO(12, 12, 13, 0.15),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                   ),
-                  onPressed: func,
-                  child: Text(btn, style: TextStyle(fontSize: 12))
+                  onPressed: _success ? (_claimed ? null : _func) : null,
+                  child: Text(_success ? (_claimed ? 'Claimed' : 'Claim') : 'Failed', style: TextStyle(fontSize: 12))
                 )
               )
             ],
