@@ -121,8 +121,8 @@ class HomePageState extends State<HomePage> {
     if (_loading) return;
     setState(() => _loading = true);
     BaseOptions options = BaseOptions(
-      connectTimeout: Duration(seconds: 1),
-      sendTimeout: Duration(seconds: 1),
+      // connectTimeout: Duration(seconds: 1),
+      // sendTimeout: Duration(seconds: 1),
     );
     options.headers['X-CMC_PRO_API_KEY'] = '4cc00188-ea57-4fb0-aa41-f5f7f4d376bc';
     Dio dio = Dio(options);

@@ -17,7 +17,6 @@ class PredictionBox extends StatefulWidget {
 }
 
 class PredictionBoxState extends State<PredictionBox> {
-  String timeText = 'Ends in';
   List<Object> predictionList = [
     {
       'data': PredictionController.btcOptions,
@@ -44,6 +43,7 @@ class PredictionBoxState extends State<PredictionBox> {
   int btcUpProgress = 0;
   int ethUpProgress = 0;
   int solUpProgress = 0;
+  bool get after18 => DateTime.now().isAfter(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day, 18));
 
   @override
   initState() {
@@ -204,7 +204,7 @@ class PredictionBoxState extends State<PredictionBox> {
                         disabledBackgroundColor: Color(0xFFEDEFF1),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
-                      onPressed: timeText == 'Starts in' ? null : () {
+                      onPressed: after18 ? null : () {
                         _onPredict(index, 'Up');
                       },
                       child: Text('Up', style: TextStyle(fontSize: 16))
@@ -221,7 +221,7 @@ class PredictionBoxState extends State<PredictionBox> {
                         disabledBackgroundColor: Color(0xFFEDEFF1),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
-                      onPressed: timeText == 'Starts in' ? null : () {
+                      onPressed: after18 ? null : () {
                         _onPredict(index, 'Down');
                       },
                       child: Text('Down', style: TextStyle(fontSize: 16))
