@@ -6,7 +6,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import '/common/eventbus.dart';
 import '/widget/draggable_widget.dart';
+import '/widget/draggable_text.dart';
 import '/controller/create.dart';
+import '/controller/sticker.dart';
 
 class CreateView extends StatefulWidget {
   const CreateView({super.key});
@@ -31,15 +33,12 @@ class CreateViewState extends State<CreateView> {
     Color(0xFF54E500)
   ];
   int curColor = 0;
-  double curBlur = 0;
+  double curBlur = 1;
 
-  List<Image> stickerList = [
-    Image.asset('assets/images/stickers/sticker_2.png'),
-    Image.asset('assets/images/stickers/sticker_4.png'),
-    Image.asset('assets/images/NFTs/nft_1.png'),
-    Image.asset('assets/images/NFTs/nft_9.png'),
-  ];
+  get stickerList => StickerController.stickerList;
   List<WidgetData> widgetList = [];
+  List<TextData> textList = [];
+  String textVal = '';
 
   // 打开相册选择图片
   _openGallery() async {
@@ -52,7 +51,7 @@ class CreateViewState extends State<CreateView> {
         position: Offset(100, 100),
         size: Size(100, 100),
         angle: 0.0,
-        image: Image.file(File(image.path)),
+        image: Image.file(File(image.path), fit: BoxFit.fill,),
         onClose: () {}
       ));
       CreateController.incWidget();
@@ -61,7 +60,7 @@ class CreateViewState extends State<CreateView> {
     });
   }
 
-  // 新增可拖拽控件
+  // 新增可拖拽图片控件
   _addDraggableWidget(Image image) {
     int widgetLength = widgetList.length;
     setState(() {
@@ -79,6 +78,27 @@ class CreateViewState extends State<CreateView> {
         }
       ));
       CreateController.incWidget();
+      CreateController.onFocus(key);
+    });
+  }
+
+  // 新增可拖拽文字控件
+  _addDraggableText(text) {
+    int textLength = textList.length;
+    setState(() {
+      String key = 'text_${textList.length + 1}';
+      textList.add(TextData(
+        key: key,
+        position: Offset(100, 100),
+        size: Size(100, 50),
+        angle: 0.0,
+        text: text,
+        onClose: () {
+          setState(() {
+            textList.removeAt(textLength);
+          });
+        }
+      ));
       CreateController.onFocus(key);
     });
   }
@@ -255,36 +275,40 @@ class CreateViewState extends State<CreateView> {
   Widget createPanel() {
     return Builder(builder: ((ctx) => Screenshot(
       controller: _scController,
-      child: Container(
-        clipBehavior: Clip.hardEdge,
-        decoration: BoxDecoration(
-          color: colorList[curColor],
-          borderRadius: BorderRadius.circular(40),
-          boxShadow: [
-            BoxShadow(
-              color: Color.fromRGBO(119, 119, 119, 0.15),
-              offset: Offset(-2, -2),
-              blurRadius: 5,
-              spreadRadius: 0
-            ),
-            BoxShadow(
-              color: Color.fromRGBO(119, 119, 119, 0.15),
-              offset: Offset(2, 2), // 阴影偏移量 (水平, 垂直)
-              blurRadius: 5, // 阴影模糊程度
-              spreadRadius: 0, // 阴影扩散范围
-            ),
-          ]
+      child: Opacity(
+        opacity: curBlur,
+        child: Container(
+          clipBehavior: Clip.hardEdge,
+          decoration: BoxDecoration(
+            color: colorList[curColor],
+            borderRadius: BorderRadius.circular(40),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(119, 119, 119, 0.15),
+                offset: Offset(-2, -2),
+                blurRadius: 5,
+                spreadRadius: 0
+              ),
+              BoxShadow(
+                color: Color.fromRGBO(119, 119, 119, 0.15),
+                offset: Offset(2, 2), // 阴影偏移量 (水平, 垂直)
+                blurRadius: 5, // 阴影模糊程度
+                spreadRadius: 0, // 阴影扩散范围
+              ),
+            ]
+          ),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              SizedBox(
+                height: MediaQuery.of(ctx).size.height,
+                child: bgImage.path != '' ? Image.file(File(bgImage.path)) : Container(),
+              ),
+              ...List.generate(widgetList.length, (index) => DraggableBoard(options: widgetList[index])),
+              ...List.generate(textList.length, (index) => DraggableText(options: textList[index])),
+            ],
+          )
         ),
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            SizedBox(
-              height: MediaQuery.of(ctx).size.height,
-              child: bgImage.path != '' ? Image.file(File(bgImage.path)) : Container(),
-            ),
-            ...List.generate(widgetList.length, (index) => DraggableBoard(options: widgetList[index])),
-          ],
-        )
       )
     )));
   }
@@ -438,7 +462,7 @@ class CreateViewState extends State<CreateView> {
               ...List.generate(stickerList.length, (index) => GestureDetector(
                 onTap: () {
                   setState(() {
-                    _addDraggableWidget(stickerList[index]);
+                    _addDraggableWidget(Image.asset(stickerList[index], fit: BoxFit.fill));
                   });
                 },
                 child: Container(
@@ -450,7 +474,7 @@ class CreateViewState extends State<CreateView> {
                     color: Color(0xFFF2F3F4),
                     borderRadius: BorderRadius.circular(16)
                   ),
-                  child: stickerList[index]
+                  child: Image.asset(stickerList[index])
                 ),
               )),
             ],
@@ -487,11 +511,19 @@ class CreateViewState extends State<CreateView> {
                 filled: true,
                 fillColor: Color(0xFFF2F3F4),
               ),
+              onChanged: (val) {
+                setState(() {
+                  textVal = val;
+                });
+              }
             )
           ),
           SizedBox(width: 16),
           InkWell(
             child: Image.asset('assets/images/create/check.png', width: 24),
+            onTap: () {
+              _addDraggableText(textVal);
+            },
           )
         ],
       ),

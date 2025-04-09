@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '/controller/user.dart';
 import 'dart:math';
+import '/controller/user.dart';
+import '/controller/sticker.dart';
 
 class LotteryView extends StatefulWidget {
   const LotteryView({super.key});
@@ -81,6 +82,7 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
 
     int starCount = 0;
     int expCount = 0;
+    String nftImage = '';
     if (_endIndex == 0) {
       int n = Random().nextInt(200) + 1; // 1到200随机数
       starCount = 5 * n;
@@ -90,6 +92,16 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
       expCount = 10 * n;
       UserController.increaseExp(expCount);
     } else if (_endIndex == 2) {
+      if (StickerController.remainList.isEmpty) {
+        setState(() => _endIndex = 0);
+        int n = Random().nextInt(200) + 1; // 1到200随机数
+        starCount = 5 * n;
+        UserController.increasePoint(starCount);
+      } else {
+        int n = Random().nextInt(StickerController.remainList.length);
+        nftImage = StickerController.remainList[n];
+        StickerController.resiveSticker(n);
+      }
     }
     Widget _rewardImage() {
       if (_endIndex == 0) {
@@ -97,7 +109,7 @@ class LotteryViewState extends State<LotteryView> with SingleTickerProviderState
       } else if (_endIndex == 1) {
         return Image.asset('assets/icons/exp.png', width: 120);
       } else if (_endIndex == 2) {
-        return Image.asset('assets/icons/exp.png', width: 242);
+        return Image.asset(nftImage, width: 242);
       } else {
         return Container();
       }

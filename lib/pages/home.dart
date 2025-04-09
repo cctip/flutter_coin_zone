@@ -9,6 +9,7 @@ import '/widget/prediction.dart';
 import '/widget/results.dart';
 import '/controller/user.dart';
 import '/controller/prediction.dart';
+import '/controller/sticker.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,6 +29,7 @@ class HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     UserController.init();
+    StickerController.init();
     PredictionController.init();
     getRequest();
     _calculateTime();
