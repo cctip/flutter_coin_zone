@@ -8,6 +8,8 @@ flutter_native_splash:
   color: "#FFFFFF"
   image: assets/images/splash.png
   android: true 
+  android_gravity: "center"         # 图片居中但不裁剪
+  android_drawable: "launch_image"
   
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
