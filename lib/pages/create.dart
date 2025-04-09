@@ -1,11 +1,10 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
+import '/common/eventbus.dart';
 import '/widget/draggable_widget.dart';
 import '/controller/create.dart';
 
@@ -18,8 +17,6 @@ class CreateView extends StatefulWidget {
 
 class CreateViewState extends State<CreateView> {
   final ScreenshotController _scController = ScreenshotController();
-  var _imageFile;
-
   bool get savable => CreateController.widgetCount.value > 0;
   XFile bgImage = XFile(''); // 选择的背景图
   int curTab = 0; // 当前操作栏
@@ -92,97 +89,94 @@ class CreateViewState extends State<CreateView> {
     double pixelRatio = MediaQuery.of(context).devicePixelRatio;
     // 生成截图
     _scController.capture(pixelRatio: pixelRatio).then((imageByte) async {
-      var tempDir = await getTemporaryDirectory();
-      var file = await File('${tempDir.path}/image_${DateTime.now().millisecond}.png').create();
+      var tempDir = await getApplicationSupportDirectory();
+      var file = await File('${tempDir.path}/image_${DateTime.now().millisecondsSinceEpoch}.png').create();
       file.writeAsBytesSync(imageByte as Uint8List);
-      print("${file.path}");
-      setState(() {
-        _imageFile = imageByte;
-      });
+      bus.emit('nftCreate');
+      showDialog(
+        context: context,
+        useSafeArea: false,
+        builder: (_) => Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset('assets/images/create/result_bg.png'),
+            Positioned(child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).padding.top + 64,
+                  padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 16),
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    child: Image.asset('assets/icons/arrow_left.png', width: 32),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+                SizedBox(height: 32),
+                Container(
+                  width: 185,
+                  height: 247,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: Image.memory(imageByte),
+                ),
+                SizedBox(height: 24),
+                Text(
+                  'Saved Successfully',
+                  style: TextStyle(
+                    color: Color(0xFF1B191C),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Outfit',
+                    decoration: TextDecoration.none
+                  )
+                ),
+                SizedBox(height: 64),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 48,
+                  height: 54,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.all(0),
+                      foregroundColor: Colors.white,
+                      backgroundColor: Color(0xFF0C0C0D),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 点击内容区域关闭
+                    },
+                    child: Text('Continue Creating', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))
+                  ),
+                ),
+                SizedBox(height: 24),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 48,
+                  height: 54,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: EdgeInsets.all(0),
+                      foregroundColor: Color(0xFF1B191C),
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                      side: BorderSide(color: Color(0xFF0C0C0D), width: 1),
+                    ),
+                    onPressed: () {
+                      CreateController.clearWidget();
+                      Navigator.popUntil(context, ModalRoute.withName('/'));
+                    },
+                    child: Text('Back home', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))
+                  ),
+                ),
+              ],
+            ))
+          ],
+        )
+      );
     });
-    showDialog(
-      context: context,
-      useSafeArea: false,
-      builder: (_) => Stack(
-        alignment: Alignment.center,
-        children: [
-          Image.asset('assets/images/create/result_bg.png'),
-          Positioned(child: Column(
-            children: [
-              Container(
-                height: MediaQuery.of(context).padding.top + 64,
-                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top, left: 16),
-                alignment: Alignment.centerLeft,
-                child: GestureDetector(
-                  child: Image.asset('assets/icons/arrow_left.png', width: 32),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-              SizedBox(height: 32),
-              Container(
-                width: 185,
-                height: 247,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                ),
-                child: _imageFile != null ? Image.memory(_imageFile) : Container(),
-              ),
-              SizedBox(height: 24),
-              Text(
-                'Saved Successfully',
-                style: TextStyle(
-                  color: Color(0xFF1B191C),
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Outfit',
-                  decoration: TextDecoration.none
-                )
-              ),
-              SizedBox(height: 64),
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 48,
-                height: 54,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(0),
-                    foregroundColor: Colors.white,
-                    backgroundColor: Color(0xFF0C0C0D),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop(); // 点击内容区域关闭
-                  },
-                  child: Text('Continue Creating', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))
-                ),
-              ),
-              SizedBox(height: 24),
-              SizedBox(
-                width: MediaQuery.of(context).size.width - 48,
-                height: 54,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    padding: EdgeInsets.all(0),
-                    foregroundColor: Color(0xFF1B191C),
-                    backgroundColor: Colors.transparent,
-                    shadowColor: Colors.transparent,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                    side: BorderSide(color: Color(0xFF0C0C0D), width: 1),
-                  ),
-                  onPressed: () {
-                    CreateController.clearWidget();
-                    Navigator.popUntil(context, ModalRoute.withName('/'));
-                  },
-                  child: Text('Back home', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500))
-                ),
-              ),
-            ],
-          ))
-        ],
-      )
-    );
   }
 
   @override

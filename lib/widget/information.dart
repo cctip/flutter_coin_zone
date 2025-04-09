@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import '/controller/user.dart';
 import 'package:get/get.dart';
@@ -15,7 +16,10 @@ Widget informationBox(BuildContext context) {
           borderRadius: BorderRadius.circular(50)
         ),
         child: ClipOval(
-          child: Image.asset(UserController.avator, fit: BoxFit.cover),
+          child: Obx(() => UserController.isLocal.value ? 
+            Image.file(File(UserController.avator.value), fit: BoxFit.cover) : 
+            Image.asset(UserController.avator.value, fit: BoxFit.cover)
+          ),
         )
       ),
       SizedBox(width: 12),

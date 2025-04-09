@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:intl/intl.dart';
 import '/common/share_pref.dart';
 import 'package:get/get.dart';
@@ -5,7 +7,8 @@ import 'package:get/get.dart';
 var formater = DateFormat('yyyy-MM-dd');
 
 class UserController extends GetxController {
-  static String avator = 'assets/images/avator/1.png';
+  static final avator = 'assets/images/avator/1.png'.obs;
+  static final isLocal = false.obs;
   static final level = RxInt(1);
   static final exp = RxInt(0);
   static final points = RxInt(0);
@@ -14,6 +17,7 @@ class UserController extends GetxController {
 
   // 初始化
   static init() {
+    validAvator();
     points.value = SharePref.getInt('points') ?? 0;
     level.value = SharePref.getInt('level') ?? 1;
     exp.value = SharePref.getInt('exp') ?? 0;
@@ -21,6 +25,33 @@ class UserController extends GetxController {
     if (freeSpinTime.value != '') {
       freeSpined.value = freeSpinTime.value == formater.format(DateTime.now());
     }
+  }
+
+  // 验证头像是否存在
+  static validAvator() {
+    String path = SharePref.getString('avator') ?? '';
+    if (path == '') return;
+    List filePathStrs = path.split('.');
+    if (filePathStrs[0] == 'assets') {
+      isLocal.value = false;
+    } else {
+      Directory dir = Directory(path);
+      if (!dir.existsSync()) {
+        isLocal.value = false;
+        avator.value = 'assets/images/avator/1.png';
+        SharePref.setString('avator', avator.value);
+      } else {
+        isLocal.value = true;
+        avator.value = path;
+      }
+    }
+    
+  }
+  // 设置头像
+  static setAvator(path) {
+    avator.value = path;
+    isLocal.value = true;
+    SharePref.setString('avator', path);
   }
 
   // 增加小星星点数

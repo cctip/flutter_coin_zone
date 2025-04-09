@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '/common/share_pref.dart';
-import '/controller/challenge.dart';
-import '/controller/prediction.dart';
-import '/controller/check.dart';
-import '/controller/user.dart';
+// import '/common/share_pref.dart';
+// import '/controller/challenge.dart';
+// import '/controller/prediction.dart';
+// import '/controller/check.dart';
+// import '/controller/user.dart';
 
 class SettingView extends StatelessWidget {
   const SettingView({super.key});
@@ -58,13 +58,13 @@ class SettingView extends StatelessWidget {
                   launchUrl(Uri.parse(''));
                 }
               ),
-              linkItem('Clear Cache', Container(), () {
-                SharePref.clear();
-                UserController.init();
-                CheckController.init();
-                PredictionController.init();
-                ChallengeController.init();
-              }),
+              // linkItem('Clear Cache', Container(), () {
+              //   SharePref.clear();
+              //   UserController.init();
+              //   CheckController.init();
+              //   PredictionController.init();
+              //   ChallengeController.init();
+              // }),
             ],
           ),
         ],

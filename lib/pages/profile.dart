@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '/common/eventbus.dart';
 import '/widget/information.dart';
 import '/controller/user.dart';
 import '/controller/check.dart';
@@ -14,15 +18,34 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStateMixin {
   int curTab = 0;
+  List<FileSystemEntity> myNFTs = [];
 
   @override
   void initState() {
     super.initState();
     CheckController.init();
     ChallengeController.init();
+    _getNFTs();
+    bus.on('nftCreate', (_) {_getNFTs();});
   }
 
-
+  // 获取已创建文件
+  _getNFTs() async {
+    var tempDir = await getApplicationSupportDirectory();
+    Directory dir = Directory(tempDir.path);
+    if (!dir.existsSync()) return;
+    var list = dir.listSync().reversed;
+    List<FileSystemEntity> newList = [];
+    for (FileSystemEntity file in list) {
+      List filePathStrs = file.path.split('.');
+      if (filePathStrs[filePathStrs.length - 1] == 'png') {
+        newList.add(file);
+      }
+    }
+    setState(() {
+      myNFTs = newList;
+    });
+  }
 
 	@override
 	Widget build(BuildContext context) {
@@ -269,7 +292,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
   Widget __tabBox() {
     return Container(
       width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.all(16),
+      padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32))
@@ -326,25 +349,27 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
           ),
           SizedBox(height: 8),
           curTab == 0 ? __challengeBox() : __myNFT(),
-          SizedBox(height: MediaQuery.of(context).padding.bottom + 56)
         ],
       )
     );
   }
   // 成就
   Widget __challengeBox() {
-    return Obx(() => Column(
-      children: [
-        __challengeItem('Predict 3 times', 20, PredictionController.predictTimes.value < 3, ChallengeController.predict3.value, ChallengeController.claimPredict3),
-        __challengeItem('Predicted for 2 consecutive days', 50, PredictionController.continuousPredict.value < 2, ChallengeController.predictCst2.value, ChallengeController.claimPredictCst2),
-        __challengeItem('Checked in for 3 consecutive days', 80, CheckController.signedCstTimes.value < 3, ChallengeController.checkedCst3.value, ChallengeController.claimCheckedCst3),
-        __challengeItem('Checked in for 7 consecutive days', 100, CheckController.signedCstTimes.value < 7, ChallengeController.checkedCst7.value, ChallengeController.claimCheckedCst7),
-        __challengeItem('Predicted for 7 consecutive days', 200, PredictionController.predictTimes.value < 7, ChallengeController.predictCst7.value, ChallengeController.claimPredictCst7),
-        __challengeItem('Successfully predicted 10 times', 300, PredictionController.predictSuccessTimes.value < 10, ChallengeController.successPrt10.value, ChallengeController.claimSuccessPrt10),
-        __challengeItem('Successfully predicted 30 times', 900, PredictionController.predictSuccessTimes.value < 30, ChallengeController.successPrt30.value, ChallengeController.claimSuccessPrt30),
-        __challengeItem('Successfully predicted 50 times', 2000, PredictionController.predictSuccessTimes.value < 50, ChallengeController.successPrt50.value, ChallengeController.claimSuccessPrt50)
-      ],
-    ));
+    return Container(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom + 72),
+      child: Obx(() => Column(
+        children: [
+          __challengeItem('Predict 3 times', 20, PredictionController.predictTimes.value < 3, ChallengeController.predict3.value, ChallengeController.claimPredict3),
+          __challengeItem('Predicted for 2 consecutive days', 50, PredictionController.continuousPredict.value < 2, ChallengeController.predictCst2.value, ChallengeController.claimPredictCst2),
+          __challengeItem('Checked in for 3 consecutive days', 80, CheckController.signedCstTimes.value < 3, ChallengeController.checkedCst3.value, ChallengeController.claimCheckedCst3),
+          __challengeItem('Checked in for 7 consecutive days', 100, CheckController.signedCstTimes.value < 7, ChallengeController.checkedCst7.value, ChallengeController.claimCheckedCst7),
+          __challengeItem('Predicted for 7 consecutive days', 200, PredictionController.predictTimes.value < 7, ChallengeController.predictCst7.value, ChallengeController.claimPredictCst7),
+          __challengeItem('Successfully predicted 10 times', 300, PredictionController.predictSuccessTimes.value < 10, ChallengeController.successPrt10.value, ChallengeController.claimSuccessPrt10),
+          __challengeItem('Successfully predicted 30 times', 900, PredictionController.predictSuccessTimes.value < 30, ChallengeController.successPrt30.value, ChallengeController.claimSuccessPrt30),
+          __challengeItem('Successfully predicted 50 times', 2000, PredictionController.predictSuccessTimes.value < 50, ChallengeController.successPrt50.value, ChallengeController.claimSuccessPrt50)
+        ],
+      )),
+    );
   }
   // 成就单个区块
   Widget __challengeItem(text, exp, disabled, claimed, func) {
@@ -390,8 +415,88 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
   }
   // 我的NFT
   Widget __myNFT() {
-    return Container(
-      height: MediaQuery.of(context).size.height - kToolbarHeight - 402 - MediaQuery.of(context).padding.bottom - 56,
+    return SizedBox(
+      height: MediaQuery.of(context).size.height - kToolbarHeight - 363 - MediaQuery.of(context).padding.bottom,
+      child: MasonryGridView.count(
+        padding: EdgeInsets.fromLTRB(0, 8, 0, MediaQuery.of(context).padding.bottom + 72),
+        crossAxisCount: 2, //几列
+        mainAxisSpacing: 16, // 间距
+        crossAxisSpacing: 16, // 纵向间距？
+        itemCount: myNFTs.length, // 元素个数
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.file(File(myNFTs[index].path))
+                  ),
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.all(0),
+                          elevation: 0,
+                          shadowColor: Colors.transparent,
+                          backgroundColor: Color.fromRGBO(12, 12, 13, 0.25),
+                        ),
+                        onPressed: () {
+                        },
+                        child: Image.asset('assets/icons/download.png', width: 20)
+                      ),
+                    )
+                  )
+                ],
+              ),
+              SizedBox(height: 6),
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(0),
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xFF0C0C0D),
+                        disabledForegroundColor: Color.fromRGBO(27, 25, 28, 0.3),
+                        disabledBackgroundColor: Color(0xFFEDEFF1),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      ),
+                      onPressed: () {
+                        UserController.setAvator(myNFTs[index].path);
+                      },
+                      child: Text('Set as avator', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400))
+                    )
+                  ),
+                  SizedBox(width: 8),
+                  SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: EdgeInsets.all(0),
+                        elevation: 0,
+                        shadowColor: Colors.transparent,
+                        backgroundColor: Color.fromRGBO(27, 25, 28, 0.15),
+                      ),
+                      onPressed: () {
+                        myNFTs[index].deleteSync();
+                        _getNFTs();
+                        UserController.validAvator();
+                      },
+                      child: Image.asset('assets/icons/delete.png', width: 20)
+                    ),
+                  )
+                ],
+              )
+            ],
+          );
+        }
+      ),
     );
   }
 }
