@@ -10,6 +10,8 @@ import '/widget/draggable_text.dart';
 import '/controller/create.dart';
 import '/controller/sticker.dart';
 
+FocusNode textFocusNode = FocusNode();
+
 class CreateView extends StatefulWidget {
   const CreateView({super.key});
 
@@ -491,6 +493,7 @@ class CreateViewState extends State<CreateView> {
         children: [
           Expanded(
             child: TextField(
+              focusNode: textFocusNode,
               style: TextStyle(height: 1),
               decoration: InputDecoration(
                 isDense: true,
@@ -523,6 +526,7 @@ class CreateViewState extends State<CreateView> {
             child: Image.asset('assets/images/create/check.png', width: 24),
             onTap: () {
               _addDraggableText(textVal);
+              textFocusNode.unfocus();
             },
           )
         ],

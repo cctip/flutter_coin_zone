@@ -18,7 +18,7 @@ class UserController extends GetxController {
   // 初始化
   static init() {
     validAvator();
-    points.value = SharePref.getInt('points') ?? 50000;
+    points.value = SharePref.getInt('points') ?? 0;
     level.value = SharePref.getInt('level') ?? 1;
     exp.value = SharePref.getInt('exp') ?? 0;
     freeSpinTime.value = SharePref.getString('freeSpinTime') ?? '';

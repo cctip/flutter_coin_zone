@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_coin_zone/common/utils.dart';
 import 'package:get/get.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -445,7 +447,10 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                           shadowColor: Colors.transparent,
                           backgroundColor: Color.fromRGBO(12, 12, 13, 0.25),
                         ),
-                        onPressed: () {
+                        onPressed: () async {
+                          var file = File(myNFTs[index].path).readAsBytesSync();
+                          await ImageGallerySaver.saveImage(file);
+                          Utils.toast(context, message: 'Saved to Album Successfully');
                         },
                         child: Image.asset('assets/icons/download.png', width: 20)
                       ),

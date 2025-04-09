@@ -17,8 +17,8 @@ class CheckController extends GetxController {
     DateTime now = DateTime.now();
     int curYear = now.year; // 今年
     int curMonth = now.month; // 当月
-    int curDay = DateTime.now().day; // 今日
-    int weekday = DateTime.now().weekday; // 今天是本周的第几天
+    int curDay = now.day; // 今日
+    int weekday = now.weekday; // 今天是本周的第几天
 
     String today = formater.format(now); // 今天
     String yestoday = formater.format(DateTime(curYear, curMonth, curDay - 1)); // 昨天

@@ -24,6 +24,7 @@ class HomePageState extends State<HomePage> {
   Duration _remainingTime = Duration.zero;
   String timeText = 'Ends in';
   bool get todayPredict => PredictionController.lastPredictTime.value == DateFormat('yyyy-MM-dd').format(DateTime.now());
+  bool get yestodayPredict => PredictionController.lastPredictTime.value == DateFormat('yyyy-MM-dd').format(DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day - 1));
 
   @override
   void initState() {
@@ -207,7 +208,7 @@ class HomePageState extends State<HomePage> {
                     SliverToBoxAdapter(
                       child: Column(
                         children: [
-                          todayPredict ? ResultsBox(loading: _loading) : Container(),
+                          yestodayPredict ? ResultsBox(loading: _loading) : Container(),
                           SizedBox(height: 12),
                           __predictionTitle(),
                           PredictionBox(loading: _loading),
