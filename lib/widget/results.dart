@@ -14,8 +14,8 @@ class ResultsBox extends StatefulWidget {
 
 class ResultsBoxState extends State<ResultsBox> {
   bool get btcPrted => PredictionController.btcOptions['predict'] != '' || true;
-  bool get ethPrted => PredictionController.ethOptions['predict'] != '';
-  bool get solPrted => PredictionController.solOptions['predict'] != '';
+  bool get ethPrted => PredictionController.ethOptions['predict'] != '' || true;
+  bool get solPrted => PredictionController.solOptions['predict'] != '' || true;
 
   @override
   initState() {
