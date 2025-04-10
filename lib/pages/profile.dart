@@ -263,7 +263,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Image.asset('assets/icons/star_blur.png', width: 16),
+                Image.asset('assets/icons/${CheckController.weekSignedTimes.contains('$day') ? 'star' : 'star_blur'}.png', width: 16),
                 Text('+10', style: TextStyle(color: CheckController.weekSignedTimes.contains('$day') ? Colors.white : Color.fromRGBO(45, 42, 47, 0.3)))
               ],
             ),
