@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_coin_zone/common/utils.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:share_plus/share_plus.dart';
+import 'package:share_plus/share_plus.dart';
 
 // import '/common/share_pref.dart';
 // import '/controller/challenge.dart';
@@ -32,7 +32,9 @@ class SettingView extends StatelessWidget {
               linkItem(
                 'Share to friends',
                 Image.asset('assets/icons/arrow.png', width: 24),
-                (){}
+                (){
+                  Share.share('Tap into the Trend. Rule the Zone');
+                }
               ),
               linkItem(
                 'Contact us',
