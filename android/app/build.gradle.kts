@@ -6,6 +6,26 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("keystore") {
+            keyAlias = "key"
+            keyPassword = "112233"
+            storeFile = file("key.jks")
+            storePassword = "112233"
+        }
+    }
+    buildTypes {
+        val signConfig = signingConfigs.getByName("keystore")
+        getByName("release") {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rule.pro"
+            )
+            signingConfig = signConfig
+        }
+    }
+    
     namespace = "com.CoinZone.CoinZone"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"  // flutter.ndkVersion
