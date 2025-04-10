@@ -12,7 +12,13 @@ class Utils {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Text(message, style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.w700))
+            Text(message, style: TextStyle(
+              decoration: TextDecoration.none,
+              color: Colors.white,
+              fontFamily: 'Outfit',
+              fontSize: 24,
+              fontWeight: FontWeight.w700
+            ))
           ],
         ),
       )

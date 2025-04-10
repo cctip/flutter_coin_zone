@@ -13,7 +13,7 @@ class ResultsBox extends StatefulWidget {
 }
 
 class ResultsBoxState extends State<ResultsBox> {
-  bool get btcPrted => PredictionController.btcOptions['predict'] != '';
+  bool get btcPrted => PredictionController.btcOptions['predict'] != '' || true;
   bool get ethPrted => PredictionController.ethOptions['predict'] != '';
   bool get solPrted => PredictionController.solOptions['predict'] != '';
 
