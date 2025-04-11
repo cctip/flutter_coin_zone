@@ -44,7 +44,7 @@ class HomePageState extends State<HomePage> {
     
     setState(() {
       if (today18.isAfter(now)) {
-        PredictionController.resetPrediction();
+        // PredictionController.resetPrediction();
         _remainingTime = today18.difference(now);
         timeText = 'Ends in';
       } else {
