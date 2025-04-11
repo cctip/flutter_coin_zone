@@ -40,21 +40,21 @@ class SettingView extends StatelessWidget {
                 'Contact us',
                 Image.asset('assets/icons/arrow.png', width: 24),
                 (){
-                  Utils.toast(context, message: 'flixcinema.id@gmail.com');
+                  Utils.toast(context, message: 'mejasenigroup@gmail.com');
                 }
               ),
               linkItem(
                 'Privacy policy',
                 Image.asset('assets/icons/arrow.png', width: 24),
                 (){
-                  launchUrl(Uri.parse('https://www.freeprivacypolicy.com/live/0a1e0287-39d7-40bf-abcc-bab3fe17cf0c'));
+                  launchUrl(Uri.parse('https://www.freeprivacypolicy.com/live/c6dcc903-8d95-4a2b-a344-3bed52746cd4'));
                 }
               ),
               linkItem(
                 'Terms of service',
                 Image.asset('assets/icons/arrow.png', width: 24),
                 (){
-                  launchUrl(Uri.parse('https://www.freeprivacypolicy.com/live/eb8f3d5b-dcba-43c1-9f90-4cae9c3222cc'));
+                  launchUrl(Uri.parse('https://www.freeprivacypolicy.com/live/e384394a-fa82-4f90-9f46-3d75c327ff5c'));
                 }
               ),
               linkItem(
