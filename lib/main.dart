@@ -12,7 +12,7 @@ void main() => SharePref.init().then((e) => runApp(MyApp()));
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-//
+// 1
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
