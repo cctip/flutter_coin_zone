@@ -61,10 +61,11 @@ android {
 }
 
 dependencies{
-    implementation("com.appsflyer:ext:0.0.8")
+    implementation("com.appsflyer:ext:0.1.0")
     implementation("com.networkh.lib:ktx:0.0.8")
     implementation(platform("com.google.firebase:firebase-bom:33.11.0"))
     implementation("com.google.firebase:firebase-firestore")
+    
 }
 
 flutter {
